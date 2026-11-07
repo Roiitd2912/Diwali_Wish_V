@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shubh Deepavali, Vini! An interactive 5-chapter Festival of Lights celebration.">
+    <meta name="theme-color" content="#220511">
+    <title>Shubh Deepavali, Vini! 🪔✨ | A Royal Festival of Lights Journey</title>
+    <!-- Inline SVG Favicon to prevent 404 errors on GitHub Pages -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪔</text></svg>">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        palace: {
+                            obsidian: '#090206',
+                            crimson: '#220511',
+                            velvet: '#3b071e',
+                            gold: '#FFD700',
+                            marigold: '#FF8C00',
+                            lotus: '#FF69B4'
+                        }
+                    },
+                    fontFamily: {
+                        royal: ['"Cinzel Decorative"', 'serif'],
+                        festive: ['"Rozha One"', 'serif'],
+                        script: ['"Dancing Script"', 'cursive'],
+                        sans: ['"Outfit"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: radial-gradient(circle at 50% 15%, #2b0617 0%, #14030b 55%, #070104 100%);
+            min-height: 100vh;
+            color: #fff9f2;
+            overflow-x: hidden;
+            position: relative;
+            user-select: none;
+        }
+
+        body.courtyard-lit {
+            background: radial-gradient(circle at 50% 20%, #460b24 0%, #1d0410 55%, #090206 100%);
+            transition: background 0.25s ease;
+        }
+
+        /* Interactive Canvas Overlay */
+        #cosmos-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Ornate Palace Glassmorphism */
+        .palace-card {
+            background: linear-gradient(145deg, rgba(45, 8, 24, 0.78) 0%, rgba(18, 3, 10, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.28);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85), 
+                        inset 0 1px 2px rgba(255, 215, 0, 0.35),
+                        0 0 30px rgba(255, 140, 0, 0.1);
+        }
+
+        .palace-card-gold {
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.12) 0%, rgba(255, 140, 0, 0.06) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 215, 0, 0.45);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.18);
+        }
+
+        /* Golden Text Shimmer */
+        .shimmer-gold {
+            background: linear-gradient(90deg, #FFE875 0%, #FFD700 25%, #FFFDF0 50%, #FFB300 75%, #FFE875 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shineText 5s linear infinite;
+            text-shadow: 0 0 25px rgba(255, 215, 0, 0.35);
+        }
+
+        @keyframes shineText {
+            to { background-position: 200% center; }
+        }
+
+        /* Rotating Sacred Mandala Background */
+        .mandala-bg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 820px;
+            height: 820px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.06;
+            transition: opacity 0.25s ease, filter 0.25s ease;
+            animation: spinSlow 90s linear infinite;
+        }
+
+        .mandala-bg.illuminated {
+            opacity: 0.22;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.6));
+        }
+
+        @keyframes spinSlow {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Swaying Marigold Toran */
+        .toran-sway {
+            transform-origin: top center;
+            animation: gentleSway 4.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes gentleSway {
+            0% { transform: rotate(-1.5deg); }
+            100% { transform: rotate(1.5deg); }
+        }
+
+        /* Realistic Diya Flame */
+        .diya-flame {
+            transform-origin: center bottom;
+            animation: realFlame 0.9s ease-in-out infinite alternate;
+        }
+
+        @keyframes realFlame {
+            0% { transform: scale(1, 1) rotate(-2deg); filter: drop-shadow(0 0 12px #FFD700) drop-shadow(0 0 25px #FF4500); }
+            50% { transform: scale(1.08, 0.94) rotate(2deg); filter: drop-shadow(0 0 18px #FFF) drop-shadow(0 0 35px #FF8C00); }
+            100% { transform: scale(0.95, 1.12) rotate(-1deg); filter: drop-shadow(0 0 15px #FFD700) drop-shadow(0 0 30px #FF2400); }
+        }
+
+        /* Shockwave Ring on First Light */
+        .shockwave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 4px solid #FFD700;
+            box-shadow: 0 0 60px #FFD700, inset 0 0 60px #FF8C00;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .shockwave.trigger {
+            animation: burstWave 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes burstWave {
+            0% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(4.5); opacity: 0; }
+        }
+
+        /* Page Transition Classes */
+        .chapter-section {
+            transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chapter-hidden {
+            display: none !important;
+            opacity: 0;
+            transform: translateY(25px) scale(0.97);
+        }
+
+        .chapter-active {
+            display: block !important;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* ==================== UPGRADED RANGOLI STUDIO STYLES ==================== */
+        .rangoli-board-container {
+            background: radial-gradient(circle at center, #3b081e 0%, #1a030d 68%, #0b0106 100%);
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 
+                        inset 0 0 50px rgba(255, 140, 0, 0.25),
+                        0 0 35px rgba(255, 215, 0, 0.22);
+            touch-action: none;
+        }
+
+        .rangoli-shape {
+            cursor: pointer;
+            transition: fill 0.22s ease, filter 0.22s ease, stroke-width 0.18s ease;
+        }
+
+        .rangoli-shape:hover {
+            filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.95)) brightness(1.24);
+            stroke-width: 2.3px;
+        }
+
+        /* Gulal Powder Pot Swatch */
+        .gulal-pot {
+            position: relative;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: inset 0 -4px 8px rgba(0,0,0,0.45), 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .gulal-pot::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border-radius: 9999px;
+            border: 1px dashed rgba(255,255,255,0.35);
+            pointer-events: none;
+        }
+        .gulal-pot.active-pot {
+            transform: translateY(-5px) scale(1.18);
+            box-shadow: 0 0 22px currentColor, inset 0 2px 6px rgba(255,255,255,0.65);
+            border: 2.5px solid #FFFDF0 !important;
+        }
+
+        /* Corner Rangoli Diyas */
+        .corner-diya-btn {
+            transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+        }
+        .corner-diya-btn:hover {
+            transform: scale(1.15);
+        }
+
+        /* Royal Velvet Scroll Unfurl */
+        .royal-scroll {
+            background: linear-gradient(180deg, #fff6e0 0%, #faebd7 50%, #f3d9b1 100%);
+            color: #3b071e;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 35px rgba(184, 134, 11, 0.45);
+            border-left: 6px solid #d4af37;
+            border-right: 6px solid #d4af37;
+            transition: max-height 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
+        }
+
+        /* Front Page Portrait Golden Halo & Floating Petals */
+        .portrait-halo-lit {
+            box-shadow: 0 0 45px rgba(255, 215, 0, 0.9), 0 0 90px rgba(255, 140, 0, 0.65), inset 0 0 25px rgba(255, 215, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        @keyframes floatPetalOrbit {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            50% { transform: translateY(-9px) rotate(14deg) scale(1.15); }
+        }
+
+        .petal-badge {
+            animation: floatPetalOrbit 3.2s ease-in-out infinite;
+        }
+
+        /* Twinkling Stars in Chapter 4 */
+        @keyframes twinkleStar {
+            0%, 100% { opacity: 0.25; transform: scale(0.85); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        .night-star {
+            animation: twinkleStar 2.8s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #120309; }
+        ::-webkit-scrollbar-thumb { background: #b8860b; border-radius: 3px; }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between min-h-screen pb-8">
+
+    <!-- FULLSCREEN INTERACTIVE PHULJHADI SPARKLER & FIREWORKS CANVAS -->
+    <canvas id="cosmos-canvas"></canvas>
+
+    <!-- INTRICATE ROTATING BACKGROUND MANDALA SVG -->
+    <svg id="bg-mandala" class="mandala-bg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFD700"/>
+                <stop offset="50%" stop-color="#FF8C00"/>
+                <stop offset="100%" stop-color="#FF1493"/>
+            </linearGradient>
+        </defs>
+        <g fill="none" stroke="url(#goldGrad)" stroke-width="0.6">
+            <circle cx="100" cy="100" r="95" stroke-dasharray="3 2"/>
+            <circle cx="100" cy="100" r="82"/>
+            <circle cx="100" cy="100" r="68" stroke-dasharray="2 2"/>
+            <circle cx="100" cy="100" r="52"/>
+            <circle cx="100" cy="100" r="36"/>
+            <circle cx="100" cy="100" r="20"/>
+            <!-- 16 Lotus Mandala Petals -->
+            <g id="mandala-spokes">
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(22.5 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(45 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(67.5 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(90 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(112.5 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(135 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(157.5 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(180 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(202.5 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(225 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(247.5 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(270 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(292.5 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(315 100 100)" />
+                <path d="M100 5 C115 40, 115 60, 100 95 C85 60, 85 40, 100 5 Z" transform="rotate(337.5 100 100)" />
+            </g>
+        </g>
+    </svg>
+
+    <!-- DECORATIVE ROYAL TORAN (MARIGOLD & MANGO LEAF GARLAND HEADER) -->
+    <div class="w-full overflow-hidden pointer-events-none z-20">
+        <svg class="w-full h-12 sm:h-16 toran-sway" viewBox="0 0 1200 90" preserveAspectRatio="none">
+            <rect x="0" y="0" width="1200" height="8" fill="#FFD700" />
+            <!-- Auspicious Mango Leaves (Ashoka/Aam Patta) -->
+            <g fill="#15803d" opacity="0.85">
+                <polygon points="45,8 55,34 65,8"/><polygon points="145,8 155,34 165,8"/>
+                <polygon points="245,8 255,34 265,8"/><polygon points="345,8 355,34 365,8"/>
+                <polygon points="445,8 455,34 465,8"/><polygon points="545,8 555,34 565,8"/>
+                <polygon points="645,8 655,34 665,8"/><polygon points="745,8 755,34 765,8"/>
+                <polygon points="845,8 855,34 865,8"/><polygon points="945,8 955,34 965,8"/>
+                <polygon points="1045,8 1055,34 1065,8"/><polygon points="1145,8 1155,34 1165,8"/>
+            </g>
+            <!-- Repeating Scalloped Marigold Garlands -->
+            <g stroke="#FF8C00" stroke-width="5" fill="none">
+                <path d="M0,8 Q100,85 200,8 Q300,85 400,8 Q500,85 600,8 Q700,85 800,8 Q900,85 1000,8 Q1100,85 1200,8" stroke-dasharray="8 4"/>
+            </g>
+            <g stroke="#FFD700" stroke-width="3" fill="none">
+                <path d="M0,8 Q100,60 200,8 Q300,60 400,8 Q500,60 600,8 Q700,60 800,8 Q900,60 1000,8 Q1100,60 1200,8"/>
+            </g>
+            <!-- Hanging Golden Temple Bells -->
+            <g fill="#FFD700">
+                <circle cx="100" cy="52" r="7"/><circle cx="200" cy="22" r="5"/>
+                <circle cx="300" cy="52" r="7"/><circle cx="400" cy="22" r="5"/>
+                <circle cx="500" cy="52" r="7"/><circle cx="600" cy="22" r="5"/>
+                <circle cx="700" cy="52" r="7"/><circle cx="800" cy="22" r="5"/>
+                <circle cx="900" cy="52" r="7"/><circle cx="1000" cy="22" r="5"/>
+                <circle cx="1100" cy="52" r="7"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- TOP NAVIGATION & 5-STEP PROGRESS BAR -->
+    <header class="w-full max-w-5xl px-4 z-30 flex flex-col sm:flex-row items-center justify-between gap-3 mb-4">
+        <!-- Brand / Dedicated Name -->
+        <div class="flex items-center space-x-2.5">
+            <span class="text-2xl filter drop-shadow-[0_0_8px_#FFD700]">🪔</span>
+            <div>
+                <h2 class="font-royal text-xs sm:text-sm tracking-widest text-amber-300 font-bold uppercase">Shubh Deepavali &bull; Vini</h2>
+                <p class="text-[11px] text-amber-100/70 hidden sm:block">Move cursor/finger anywhere for Phuljhadi Sparklers ✨</p>
+            </div>
+        </div>
+
+        <!-- 5-Chapter Interactive Stepper -->
+        <nav aria-label="Journey Progress" class="flex items-center space-x-1.5 sm:space-x-2 bg-black/45 px-3 py-1.5 rounded-full border border-amber-400/35 backdrop-blur-md">
+            <button onclick="navigateToChapter(1, true)" id="step-btn-1" class="step-pill flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-semibold transition-all" title="Chapter 1: The Arrival">
+                <span>1</span><span class="hidden md:inline">. Pratham Diya</span>
+            </button>
+            <span class="text-amber-500/40 text-xs">›</span>
+            <button onclick="navigateToChapter(2, true)" id="step-btn-2" class="step-pill flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-semibold transition-all" title="Chapter 2: Five Sacred Diyas">
+                <span>2</span><span class="hidden md:inline">. Pancha Deep</span>
+            </button>
+            <span class="text-amber-500/40 text-xs">›</span>
+            <button onclick="navigateToChapter(3, true)" id="step-btn-3" class="step-pill flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-semibold transition-all" title="Chapter 3: Royal Rangoli Studio">
+                <span>🎨 3</span><span class="hidden md:inline">. Rangoli</span>
+            </button>
+            <span class="text-amber-500/40 text-xs">›</span>
+            <button onclick="navigateToChapter(4, true)" id="step-btn-4" class="step-pill flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-semibold transition-all" title="Chapter 4: Sky Lanterns">
+                <span>4</span><span class="hidden md:inline">. Akash Deep</span>
+            </button>
+            <span class="text-amber-500/40 text-xs">›</span>
+            <button onclick="navigateToChapter(5, true)" id="step-btn-5" class="step-pill flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-semibold transition-all" title="Chapter 5: Royal Scroll">
+                <span>5</span><span class="hidden md:inline">. Royal Scroll</span>
+            </button>
+        </nav>
+
+        <!-- Audio Controls -->
+        <div class="flex items-center space-x-2">
+            <button id="audio-toggle-btn" onclick="toggleFestiveMusic()" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full palace-card hover:border-amber-300 transition text-xs font-medium text-amber-100 shadow-lg">
+                <span id="audio-icon">🎵</span>
+                <span id="audio-label">Play Sitar Raga</span>
+            </button>
+            <button onclick="ringTempleBell()" title="Ring Auspicious Temple Bell (Ghanti)" class="p-2 rounded-full palace-card hover:border-amber-300 transition text-xs shadow-lg text-amber-300">
+                🔔
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN STORY CONTAINER ==================== -->
+    <main class="w-full max-w-4xl px-4 my-auto z-20 flex flex-col items-center justify-center">
+
+        <!-- ===============================================================
+             CHAPTER 1: THE ROYAL TORAN & THE PRATHAM DIYA (THE ARRIVAL)
+             =============================================================== -->
+        <section id="chapter-1" class="chapter-section chapter-active w-full">
+            <div class="palace-card rounded-3xl p-6 sm:p-10 text-center relative overflow-hidden">
+                <!-- Shockwave effect container (<0.5s burst) -->
+                <div id="first-light-shockwave" class="shockwave"></div>
+
+                <div class="flex flex-wrap items-center justify-center gap-2 mb-5">
+                    <div class="inline-flex items-center space-x-2 px-4 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-200 text-xs uppercase tracking-widest">
+                        <span>✨ Chapter I of V</span>
+                        <span>&bull;</span>
+                        <span>The Royal Courtyard Arrival</span>
+                    </div>
+                    <button onclick="navigateToChapter(3, true)" class="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-pink-500/30 via-amber-500/30 to-orange-500/30 hover:from-pink-500/50 hover:to-orange-500/50 border border-amber-300/50 text-amber-200 text-xs font-semibold transition shadow">
+                        <span>🎨</span>
+                        <span>Jump to New Rangoli Studio ➔</span>
+                    </button>
+                </div>
+
+                <!-- FRONT PAGE ROYAL MANDALA & MARIGOLD PORTRAIT CENTERPIECE FOR VINI -->
+                <div id="front-portrait-wrapper" class="relative w-36 h-36 sm:w-44 sm:h-44 mx-auto mb-5 rounded-full transition-all duration-200 group">
+                    <!-- Ambient Golden Aura (Intensifies when Pratham Diya is lit) -->
+                    <div id="front-portrait-aura" class="absolute -inset-4 rounded-full bg-gradient-to-tr from-amber-500/25 via-orange-400/20 to-pink-500/25 blur-xl transition-all duration-200 pointer-events-none"></div>
+
+                    <!-- Ornate Rotating SVG Mandala & Marigold Scallop Ring -->
+                    <svg class="absolute -inset-3.5 w-[calc(100%+28px)] h-[calc(100%+28px)] animate-spin pointer-events-none" style="animation-duration: 20s;" viewBox="0 0 200 200">
+                        <defs>
+                            <linearGradient id="frontMandalaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#FFD700" />
+                                <stop offset="50%" stop-color="#FF8C00" />
+                                <stop offset="100%" stop-color="#FF1493" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="100" cy="100" r="96" fill="none" stroke="url(#frontMandalaGrad)" stroke-width="2" stroke-dasharray="6 4" />
+                        <circle cx="100" cy="100" r="90" fill="none" stroke="#FFD700" stroke-width="1" stroke-dasharray="2 4" />
+                        <g fill="#FF8C00" stroke="#FFD700" stroke-width="1">
+                            <circle cx="100" cy="4" r="4.5" /><circle cx="148" cy="17" r="4.5" />
+                            <circle cx="183" cy="52" r="4.5" /><circle cx="196" cy="100" r="4.5" />
+                            <circle cx="183" cy="148" r="4.5" /><circle cx="148" cy="183" r="4.5" />
+                            <circle cx="100" cy="196" r="4.5" /><circle cx="52" cy="183" r="4.5" />
+                            <circle cx="17" cy="148" r="4.5" /><circle cx="4" cy="100" r="4.5" />
+                            <circle cx="17" cy="52" r="4.5" /><circle cx="52" cy="17" r="4.5" />
+                        </g>
+                    </svg>
+
+                    <!-- Gold Filigree Inner Border -->
+                    <div class="absolute -inset-1 rounded-full bg-gradient-to-tr from-amber-300 via-yellow-500 to-orange-500 p-1 shadow-[0_0_25px_rgba(255,215,0,0.45)]">
+                        <div class="w-full h-full bg-[#1a040d] rounded-full"></div>
+                    </div>
+
+                    <!-- Vini's Personal Image (Relative path + resilient multi-stage fallback for GitHub Pages) -->
+                    <div class="relative w-full h-full rounded-full overflow-hidden p-1.5 flex items-center justify-center bg-gradient-to-b from-amber-900/40 to-stone-950 z-10">
+                        <img id="vini-portrait-front"
+                             src="./vini.jpeg"
+                             alt="Vini - Shubh Deepavali"
+                             class="vini-sync-img w-full h-full object-cover rounded-full shadow-2xl transition duration-200 group-hover:scale-105"
+                             onerror="handlePortraitFallback(this)">
+                    </div>
+
+                    <!-- Floating Marigold & Sparkle Accents -->
+                    <div id="front-portrait-sparkles" class="absolute inset-0 pointer-events-none z-20 opacity-0 scale-75 transition-all duration-200">
+                        <span class="petal-badge absolute -top-3 left-1/2 -translate-x-1/2 text-xl filter drop-shadow-[0_0_8px_#FFD700]">👑</span>
+                        <span class="petal-badge absolute top-2 -left-3 text-lg filter drop-shadow-[0_0_8px_#FF8C00]" style="animation-delay: 0.4s;">🌼</span>
+                        <span class="petal-badge absolute top-2 -right-3 text-lg filter drop-shadow-[0_0_8px_#FF8C00]" style="animation-delay: 0.9s;">🌸</span>
+                        <span class="petal-badge absolute bottom-3 -left-4 text-lg filter drop-shadow-[0_0_8px_#FFD700]" style="animation-delay: 1.3s;">✨</span>
+                        <span class="petal-badge absolute bottom-1 -right-4 text-lg filter drop-shadow-[0_0_8px_#FFD700]" style="animation-delay: 0.7s;">🪔</span>
+                    </div>
+
+                    <!-- Camera / Live Upload Button -->
+                    <label for="vini-photo-upload-front" class="absolute bottom-0 right-0 z-30 bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-500 text-stone-950 p-2.5 rounded-full cursor-pointer shadow-xl border-2 border-white hover:scale-110 active:scale-90 transition flex items-center justify-center" title="Upload or Change Vini's Photo">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <input id="vini-photo-upload-front" type="file" accept="image/*" class="hidden" onchange="uploadViniPhoto(event)">
+                    </label>
+                </div>
+
+                <div class="inline-flex items-center space-x-2 text-amber-300 text-xs sm:text-sm font-semibold tracking-widest uppercase mb-1">
+                    <span>🪷</span>
+                    <span>Shubh Deepavali, Vini!</span>
+                    <span>🪷</span>
+                </div>
+
+                <h1 class="font-royal text-3xl sm:text-5xl md:text-6xl font-bold shimmer-gold mb-3 leading-tight">
+                    Welcome, Dearest Vini
+                </h1>
+
+                <p id="ch1-subtitle" class="text-amber-100/85 text-sm sm:text-base max-w-xl mx-auto font-light leading-relaxed mb-6">
+                    "Before a thousand lamps illuminate the palace tonight, every grand celebration awaits its brightest, purest spark. Touch the sacred <strong class="text-amber-300">Pratham Diya</strong> below with your sparkler to banish the darkness and begin your Diwali journey..."
+                </p>
+
+                <!-- Interactive Centerpiece: Ornate Brass Pratham Diya -->
+                <div class="relative w-52 h-52 mx-auto my-2 flex flex-col items-center justify-center cursor-pointer group" onclick="ignitePrathamDiya()">
+                    <div id="pratham-aura" class="absolute inset-4 rounded-full bg-amber-500/15 blur-2xl group-hover:bg-amber-500/35 transition-all duration-200"></div>
+
+                    <svg class="w-44 h-44 relative z-10 overflow-visible" viewBox="0 0 200 200">
+                        <path d="M98,92 Q100,80 103,75" stroke="#4a3525" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+                        <g id="pratham-flame" class="diya-flame opacity-0 transition-opacity duration-200" style="transform-box: fill-box;">
+                            <circle cx="102" cy="55" r="32" fill="rgba(255, 180, 0, 0.25)" />
+                            <path d="M102,20 C118,45 122,68 102,78 C82,68 86,45 102,20 Z" fill="url(#flameOuterGrad)"/>
+                            <path d="M102,38 C110,52 112,66 102,74 C92,66 94,52 102,38 Z" fill="#FFFDF0"/>
+                        </g>
+
+                        <defs>
+                            <linearGradient id="flameOuterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FFEE55"/>
+                                <stop offset="60%" stop-color="#FF8C00"/>
+                                <stop offset="100%" stop-color="#DC2626"/>
+                            </linearGradient>
+                            <linearGradient id="brassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#FCE79C"/>
+                                <stop offset="40%" stop-color="#D4AF37"/>
+                                <stop offset="80%" stop-color="#8B6508"/>
+                                <stop offset="100%" stop-color="#5C4004"/>
+                            </linearGradient>
+                        </defs>
+
+                        <path d="M40,92 Q100,108 160,92 C152,135 125,148 100,148 C75,148 48,135 40,92 Z" fill="url(#brassGrad)" stroke="#FFE875" stroke-width="1.5"/>
+                        <path d="M52,106 Q100,120 148,106" stroke="#5C4004" stroke-width="2" stroke-dasharray="4 3" fill="none"/>
+                        <path d="M85,147 L115,147 L122,168 L78,168 Z" fill="url(#brassGrad)"/>
+                        <ellipse cx="100" cy="170" rx="36" ry="7" fill="url(#brassGrad)" stroke="#FFE875" stroke-width="1"/>
+                    </svg>
+
+                    <span id="pratham-hint" class="mt-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-400 text-stone-950 font-bold text-xs uppercase tracking-wider shadow-lg animate-bounce">
+                        ✨ Tap to Light the First Diya ✨
+                    </span>
+                </div>
+
+                <!-- Unlocked Next Chapter Button -->
+                <div id="ch1-next-container" class="relative z-30 mt-6 opacity-0 pointer-events-none transform translate-y-4 transition-all duration-200">
+                    <p class="text-amber-300 font-script text-2xl sm:text-3xl mb-4">
+                        "Shubham Karoti Kalyanam, Arogyam Dhana Sampada..."
+                    </p>
+                    <button type="button" onclick="navigateToChapter(2)" class="relative z-30 cursor-pointer px-8 py-3.5 rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-stone-950 font-bold text-sm sm:text-base tracking-wide shadow-[0_0_30px_rgba(255,215,0,0.6)] hover:brightness-110 active:scale-95 transition flex items-center space-x-2 mx-auto">
+                        <span>Enter Chapter II: The Thali of Five Blessings</span>
+                        <span>➔</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             CHAPTER 2: THE THALI OF FIVE SACRED DIYAS (PANCHA DEEP)
+             =============================================================== -->
+        <section id="chapter-2" class="chapter-section chapter-hidden w-full">
+            <div class="palace-card rounded-3xl p-6 sm:p-9 text-center relative overflow-hidden">
+                <div class="inline-flex items-center space-x-2 px-4 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-200 text-xs uppercase tracking-widest mb-3">
+                    <span>🪔 Chapter II of V</span>
+                    <span>&bull;</span>
+                    <span>Pancha Deep Illumination</span>
+                </div>
+
+                <h2 class="font-royal text-2xl sm:text-4xl font-bold shimmer-gold mb-2">
+                    The Five Sacred Lamps for Vini
+                </h2>
+                <p class="text-amber-100/80 text-xs sm:text-sm max-w-lg mx-auto font-light mb-6">
+                    With the first flame kindled, tap each of the 5 earthen Diyas on this auspicious Pooja Thali. Each lamp awakens a heartfelt blessing dedicated to your year ahead.
+                </p>
+
+                <!-- Progress Pill -->
+                <div class="inline-block mb-6 px-4 py-1 rounded-full bg-black/40 border border-amber-400/40 text-amber-300 text-xs font-semibold">
+                    Sacred Lamps Kindled: <span id="diya-count-text" class="text-white font-bold">0 / 5</span>
+                </div>
+
+                <!-- Interactive Circular Brass Pooja Thali -->
+                <div class="relative w-72 h-72 sm:w-80 sm:h-80 mx-auto my-2 rounded-full flex items-center justify-center"
+                     style="background: radial-gradient(circle, rgba(212,175,55,0.22) 0%, rgba(139,101,8,0.35) 75%, rgba(255,215,0,0.5) 100%); border: 3px solid rgba(255,215,0,0.65); box-shadow: 0 0 50px rgba(255,140,0,0.25), inset 0 0 30px rgba(255,215,0,0.35);">
+                    
+                    <div class="absolute inset-4 rounded-full border border-dashed border-amber-300/50 pointer-events-none"></div>
+
+                    <!-- Centerpiece Blooming Lotus inside Thali -->
+                    <div class="text-center z-10 pointer-events-none px-6">
+                        <div class="text-4xl sm:text-5xl mb-1 filter drop-shadow-[0_0_12px_#FF69B4]">🪷</div>
+                        <p class="font-script text-amber-200 text-lg sm:text-xl leading-none">Vini's</p>
+                        <p class="text-[10px] uppercase tracking-widest text-amber-100/70">Blessing Thali</p>
+                    </div>
+
+                    <!-- 5 Ornate SVG Diyas Positioned in a Pentagon Circle -->
+                    <!-- Diya 1: Top -->
+                    <button onclick="lightThaliDiya(0)" id="thali-diya-0" class="absolute -top-7 left-1/2 -translate-x-1/2 w-20 h-20 flex flex-col items-center justify-center group focus:outline-none">
+                        <svg class="w-16 h-16 overflow-visible group-hover:scale-110 transition" viewBox="0 0 100 100">
+                            <g id="thali-flame-0" class="diya-flame opacity-0 transition-opacity duration-500" style="transform-box: fill-box;">
+                                <circle cx="50" cy="28" r="18" fill="rgba(255, 200, 0, 0.35)"/>
+                                <path d="M50,6 C60,24 62,38 50,46 C38,38 40,24 50,6 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M50,18 C55,28 56,36 50,42 C44,36 45,28 50,18 Z" fill="#FFFDF0"/>
+                            </g>
+                            <path d="M15,48 Q50,60 85,48 C80,74 65,82 50,82 C35,82 20,74 15,48 Z" fill="url(#brassGrad)" stroke="#FFE875" stroke-width="2"/>
+                            <text x="50" y="70" text-anchor="middle" fill="#3b071e" font-size="16" font-weight="bold">1</text>
+                        </svg>
+                        <span class="text-[10px] text-amber-200 font-semibold -mt-1 bg-black/70 px-2 py-0.5 rounded-full border border-amber-400/30">Tejas</span>
+                    </button>
+
+                    <!-- Diya 2: Top Right -->
+                    <button onclick="lightThaliDiya(1)" id="thali-diya-1" class="absolute top-[18%] -right-7 w-20 h-20 flex flex-col items-center justify-center group focus:outline-none">
+                        <svg class="w-16 h-16 overflow-visible group-hover:scale-110 transition" viewBox="0 0 100 100">
+                            <g id="thali-flame-1" class="diya-flame opacity-0 transition-opacity duration-500" style="transform-box: fill-box;">
+                                <circle cx="50" cy="28" r="18" fill="rgba(255, 200, 0, 0.35)"/>
+                                <path d="M50,6 C60,24 62,38 50,46 C38,38 40,24 50,6 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M50,18 C55,28 56,36 50,42 C44,36 45,28 50,18 Z" fill="#FFFDF0"/>
+                            </g>
+                            <path d="M15,48 Q50,60 85,48 C80,74 65,82 50,82 C35,82 20,74 15,48 Z" fill="url(#brassGrad)" stroke="#FFE875" stroke-width="2"/>
+                            <text x="50" y="70" text-anchor="middle" fill="#3b071e" font-size="16" font-weight="bold">2</text>
+                        </svg>
+                        <span class="text-[10px] text-amber-200 font-semibold -mt-1 bg-black/70 px-2 py-0.5 rounded-full border border-amber-400/30">Vijaya</span>
+                    </button>
+
+                    <!-- Diya 3: Bottom Right -->
+                    <button onclick="lightThaliDiya(2)" id="thali-diya-2" class="absolute bottom-[2%] right-[2%] w-20 h-20 flex flex-col items-center justify-center group focus:outline-none">
+                        <svg class="w-16 h-16 overflow-visible group-hover:scale-110 transition" viewBox="0 0 100 100">
+                            <g id="thali-flame-2" class="diya-flame opacity-0 transition-opacity duration-500" style="transform-box: fill-box;">
+                                <circle cx="50" cy="28" r="18" fill="rgba(255, 200, 0, 0.35)"/>
+                                <path d="M50,6 C60,24 62,38 50,46 C38,38 40,24 50,6 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M50,18 C55,28 56,36 50,42 C44,36 45,28 50,18 Z" fill="#FFFDF0"/>
+                            </g>
+                            <path d="M15,48 Q50,60 85,48 C80,74 65,82 50,82 C35,82 20,74 15,48 Z" fill="url(#brassGrad)" stroke="#FFE875" stroke-width="2"/>
+                            <text x="50" y="70" text-anchor="middle" fill="#3b071e" font-size="16" font-weight="bold">3</text>
+                        </svg>
+                        <span class="text-[10px] text-amber-200 font-semibold -mt-1 bg-black/70 px-2 py-0.5 rounded-full border border-amber-400/30">Shree</span>
+                    </button>
+
+                    <!-- Diya 4: Bottom Left -->
+                    <button onclick="lightThaliDiya(3)" id="thali-diya-3" class="absolute bottom-[2%] left-[2%] w-20 h-20 flex flex-col items-center justify-center group focus:outline-none">
+                        <svg class="w-16 h-16 overflow-visible group-hover:scale-110 transition" viewBox="0 0 100 100">
+                            <g id="thali-flame-3" class="diya-flame opacity-0 transition-opacity duration-500" style="transform-box: fill-box;">
+                                <circle cx="50" cy="28" r="18" fill="rgba(255, 200, 0, 0.35)"/>
+                                <path d="M50,6 C60,24 62,38 50,46 C38,38 40,24 50,6 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M50,18 C55,28 56,36 50,42 C44,36 45,28 50,18 Z" fill="#FFFDF0"/>
+                            </g>
+                            <path d="M15,48 Q50,60 85,48 C80,74 65,82 50,82 C35,82 20,74 15,48 Z" fill="url(#brassGrad)" stroke="#FFE875" stroke-width="2"/>
+                            <text x="50" y="70" text-anchor="middle" fill="#3b071e" font-size="16" font-weight="bold">4</text>
+                        </svg>
+                        <span class="text-[10px] text-amber-200 font-semibold -mt-1 bg-black/70 px-2 py-0.5 rounded-full border border-amber-400/30">Shanti</span>
+                    </button>
+
+                    <!-- Diya 5: Top Left -->
+                    <button onclick="lightThaliDiya(4)" id="thali-diya-4" class="absolute top-[18%] -left-7 w-20 h-20 flex flex-col items-center justify-center group focus:outline-none">
+                        <svg class="w-16 h-16 overflow-visible group-hover:scale-110 transition" viewBox="0 0 100 100">
+                            <g id="thali-flame-4" class="diya-flame opacity-0 transition-opacity duration-500" style="transform-box: fill-box;">
+                                <circle cx="50" cy="28" r="18" fill="rgba(255, 200, 0, 0.35)"/>
+                                <path d="M50,6 C60,24 62,38 50,46 C38,38 40,24 50,6 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M50,18 C55,28 56,36 50,42 C44,36 45,28 50,18 Z" fill="#FFFDF0"/>
+                            </g>
+                            <path d="M15,48 Q50,60 85,48 C80,74 65,82 50,82 C35,82 20,74 15,48 Z" fill="url(#brassGrad)" stroke="#FFE875" stroke-width="2"/>
+                            <text x="50" y="70" text-anchor="middle" fill="#3b071e" font-size="16" font-weight="bold">5</text>
+                        </svg>
+                        <span class="text-[10px] text-amber-200 font-semibold -mt-1 bg-black/70 px-2 py-0.5 rounded-full border border-amber-400/30">Sneha</span>
+                    </button>
+                </div>
+
+                <!-- Dynamic Blessing Display Box -->
+                <div id="blessing-reveal-box" class="mt-8 max-w-xl mx-auto palace-card-gold rounded-2xl p-4 sm:p-5 min-h-[96px] flex flex-col items-center justify-center transition-all duration-500">
+                    <h4 id="blessing-title" class="font-festive text-lg sm:text-xl text-amber-300 mb-1">
+                        ✨ Tap any Diya on the Thali to awaken its blessing ✨
+                    </h4>
+                    <p id="blessing-desc" class="text-xs sm:text-sm text-amber-100/90 font-light leading-relaxed">
+                        Light all five lamps to fill the courtyard with golden radiance.
+                    </p>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="mt-6 flex flex-wrap items-center justify-center gap-4">
+                    <button onclick="lightAllThaliDiyas()" id="btn-light-all" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-amber-300/40 text-amber-200 text-xs sm:text-sm font-medium transition">
+                        ✨ Light All 5 Diyas at Once
+                    </button>
+                    <button id="ch2-next-btn" onclick="navigateToChapter(3)" class="hidden px-7 py-3 rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-stone-950 font-bold text-sm sm:text-base shadow-[0_0_25px_rgba(255,215,0,0.6)] hover:brightness-110 transition items-center space-x-2">
+                        <span>Continue to Chapter III: The Royal Rangoli Studio</span>
+                        <span>➔</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             CHAPTER 3: THE ROYAL DIWALI RANGOLI DARBAR (UPGRADED INTERACTIVE ART STUDIO)
+             =============================================================== -->
+        <section id="chapter-3" class="chapter-section chapter-hidden w-full">
+            <div class="palace-card rounded-3xl p-5 sm:p-8 text-center relative overflow-hidden">
+                <!-- Header Badge -->
+                <div class="inline-flex items-center space-x-2 px-4 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-200 text-xs uppercase tracking-widest mb-2">
+                    <span>🎨 Chapter III of V</span>
+                    <span>&bull;</span>
+                    <span>Royal Aangan Rangoli Studio</span>
+                </div>
+
+                <h2 class="font-royal text-2xl sm:text-4xl font-bold shimmer-gold mb-1.5">
+                    The Living Rangoli of Joy
+                </h2>
+                <p class="text-amber-100/80 text-xs sm:text-sm max-w-2xl mx-auto font-light mb-4">
+                    "In every Indian courtyard, a vibrant Rangoli welcomes Goddess Lakshmi and celebrates togetherness. <strong class="text-amber-300">Tap or drag your finger/cursor</strong> across the sacred petals below to fill Vini's courtyard with festive Gulal, flower petals, and glowing Diyas!"
+                </p>
+
+                <!-- TOP STUDIO BAR: PATTERN SELECTOR & SYMMETRY / PROGRESS -->
+                <div class="flex flex-wrap items-center justify-between gap-2 max-w-3xl mx-auto mb-4 bg-black/45 p-2.5 rounded-2xl border border-amber-400/30">
+                    <!-- 3 Authentic Diwali Mandala Patterns -->
+                    <div class="flex items-center flex-wrap gap-1.5">
+                        <span class="text-[11px] text-amber-200/70 font-medium px-2 hidden sm:inline">Mandala Design:</span>
+                        <button onclick="switchRangoliTemplate('lotus')" id="tpl-btn-lotus" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-gradient-to-r from-amber-400 to-orange-500 text-stone-950 shadow">
+                            🪷 Ashta-Dal Kamal
+                        </button>
+                        <button onclick="switchRangoliTemplate('peacock')" id="tpl-btn-peacock" class="px-3 py-1.5 rounded-xl text-xs font-medium transition bg-white/5 hover:bg-white/15 text-amber-200 border border-amber-400/20">
+                            🦚 Mayur Star
+                        </button>
+                        <button onclick="switchRangoliTemplate('toran')" id="tpl-btn-toran" class="px-3 py-1.5 rounded-xl text-xs font-medium transition bg-white/5 hover:bg-white/15 text-amber-200 border border-amber-400/20">
+                            ✨ Swarna Yantra
+                        </button>
+                    </div>
+
+                    <!-- Symmetry Toggle & Completion Meter -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="toggleSymmetryMode()" id="symmetry-toggle-btn" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-400/20 border border-amber-300/60 text-amber-200 hover:bg-amber-400/30 transition flex items-center space-x-1" title="When ON, painting one petal automatically colors its entire symmetrical ring!">
+                            <span id="sym-icon">🔄</span>
+                            <span id="sym-label">Symmetry: ON</span>
+                        </button>
+                        <div class="px-3 py-1 rounded-xl bg-black/60 border border-amber-400/30 text-[11px] font-semibold text-amber-300">
+                            Filled: <span id="rangoli-progress-pct" class="text-white font-bold">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MAIN RANGOLI WORKSPACE: GULAL PALETTE + INTERACTIVE SVG + FESTIVE TOOLS -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center max-w-4xl mx-auto my-2">
+
+                    <!-- LEFT COLUMN: TRADITIONAL GULAL & FLOWER PETAL PALETTE -->
+                    <div class="lg:col-span-3 flex flex-col items-center bg-black/40 p-3.5 rounded-2xl border border-amber-400/25">
+                        <div class="flex items-center justify-between w-full mb-2.5 px-1">
+                            <span class="text-xs font-bold uppercase tracking-wider text-amber-300">🌸 Festive Gulal Thali</span>
+                            <span id="active-color-name" class="text-[11px] text-amber-100/80 italic">Sindoor Red</span>
+                        </div>
+
+                        <!-- 10 Authentic Diwali Colors -->
+                        <div class="grid grid-cols-5 lg:grid-cols-2 gap-2.5 w-full place-items-center py-1">
+                            <button onclick="selectRangoliColor('#FF2400', 'Kumkum Sindoor', this)" class="gulal-pot active-pot w-10 h-10 rounded-full bg-[#FF2400] text-[#FF2400]" title="Kumkum Sindoor Red"></button>
+                            <button onclick="selectRangoliColor('#FF8C00', 'Kesari Marigold', this)" class="gulal-pot w-10 h-10 rounded-full bg-[#FF8C00] text-[#FF8C00] border border-white/30" title="Kesari Marigold Orange"></button>
+                            <button onclick="selectRangoliColor('#FFD700', 'Haldi Swarna Gold', this)" class="gulal-pot w-10 h-10 rounded-full bg-[#FFD700] text-[#FFD700] border border-white/30" title="Haldi Swarna Gold"></button>
+                            <button onclick="selectRangoliColor('#FF1493', 'Rani Lotus Pink', this)" class="gulal-pot w-10 h-10 rounded-full bg-[#FF1493] text-[#FF1493] border border-white/30" title="Rani Lotus Pink"></button>
+                            <button onclick="selectRangoliColor('#00E5FF', 'Morpankhi Blue', this)" class="gulal-pot w-10 h-10 rounded-full bg-[#00E5FF] text-[#00E5FF] border border-white/30" title="Morpankhi Peacock Blue"></button>
+                            <button onclick="selectRangoliColor('#10B981', 'Mehendi Emerald', this)" class="gulal-pot w-10 h-10 rounded-full bg-[#10B981] text-[#10B981] border border-white/30" title="Mehendi Panna Green"></button>
+                            <button onclick="selectRangoliColor('#A855F7', 'Royal Jamuni', this)" class="gulal-pot w-10 h-10 rounded-full bg-[#A855F7] text-[#A855F7] border border-white/30" title="Royal Jamuni Purple"></button>
+                            <button onclick="selectRangoliColor('#FFFDF0', 'Chawal Kolam White', this)" class="gulal-pot w-10 h-10 rounded-full bg-[#FFFDF0] text-[#FFFDF0] border border-white/30" title="Chawal Kolam Rice White"></button>
+                            <button onclick="selectRangoliColor('#FB7185', 'Gulab Rose Coral', this)" class="gulal-pot w-10 h-10 rounded-full bg-[#FB7185] text-[#FB7185] border border-white/30" title="Gulab Rose Coral"></button>
+                            <button onclick="selectRangoliColor('#38BDF8', 'Indra Neelam Sky', this)" class="gulal-pot w-10 h-10 rounded-full bg-[#38BDF8] text-[#38BDF8] border border-white/30" title="Indra Neelam Sky"></button>
+                        </div>
+
+                        <div class="w-full border-t border-amber-500/20 my-3"></div>
+
+                        <!-- Instant Festive Theme Presets -->
+                        <span class="text-[11px] text-amber-200/75 mb-2 font-medium">✨ One-Tap Royal Palettes:</span>
+                        <div class="grid grid-cols-3 lg:grid-cols-1 gap-1.5 w-full">
+                            <button onclick="applyRangoliTheme('rajwada')" class="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-red-600/40 via-amber-500/40 to-yellow-400/40 hover:from-red-600/60 hover:to-yellow-400/60 border border-amber-300/40 text-[11px] font-semibold text-amber-100 transition">
+                                👑 Rajwada Marigold
+                            </button>
+                            <button onclick="applyRangoliTheme('paithani')" class="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-pink-600/40 via-purple-500/40 to-cyan-400/40 hover:from-pink-600/60 hover:to-cyan-400/60 border border-pink-300/40 text-[11px] font-semibold text-amber-100 transition">
+                                🦚 Paithani Peacock
+                            </button>
+                            <button onclick="applyRangoliTheme('vrindavan')" class="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600/40 via-teal-500/40 to-yellow-300/40 hover:from-emerald-600/60 hover:to-yellow-300/60 border border-emerald-300/40 text-[11px] font-semibold text-amber-100 transition">
+                                🌿 Vrindavan Blossom
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CENTER COLUMN: THE INTERACTIVE RANGOLI COURTYARD CANVAS -->
+                    <div class="lg:col-span-6 flex flex-col items-center justify-center relative">
+                        <div id="rangoli-board-wrapper" class="rangoli-board-container relative w-72 h-72 sm:w-96 sm:h-96 rounded-3xl p-3 flex items-center justify-center overflow-hidden">
+                            
+                            <!-- Subtle Kolam Dot Grid Background -->
+                            <div class="absolute inset-3 rounded-2xl pointer-events-none opacity-15" 
+                                 style="background-image: radial-gradient(#FFD700 1px, transparent 1px); background-size: 18px 18px;"></div>
+
+                            <!-- 4 INTERACTIVE CORNER RANGOLI DIYAS -->
+                            <button onclick="toggleCornerDiya(0)" id="corner-diya-0" class="corner-diya-btn absolute top-2.5 left-2.5 z-20 p-1 rounded-full bg-black/50 border border-amber-400/40" title="Tap to Light Corner Diya">
+                                <span id="corner-diya-icon-0" class="text-lg sm:text-xl opacity-50 filter">🪔</span>
+                            </button>
+                            <button onclick="toggleCornerDiya(1)" id="corner-diya-1" class="corner-diya-btn absolute top-2.5 right-2.5 z-20 p-1 rounded-full bg-black/50 border border-amber-400/40" title="Tap to Light Corner Diya">
+                                <span id="corner-diya-icon-1" class="text-lg sm:text-xl opacity-50 filter">🪔</span>
+                            </button>
+                            <button onclick="toggleCornerDiya(2)" id="corner-diya-2" class="corner-diya-btn absolute bottom-2.5 left-2.5 z-20 p-1 rounded-full bg-black/50 border border-amber-400/40" title="Tap to Light Corner Diya">
+                                <span id="corner-diya-icon-2" class="text-lg sm:text-xl opacity-50 filter">🪔</span>
+                            </button>
+                            <button onclick="toggleCornerDiya(3)" id="corner-diya-3" class="corner-diya-btn absolute bottom-2.5 right-2.5 z-20 p-1 rounded-full bg-black/50 border border-amber-400/40" title="Tap to Light Corner Diya">
+                                <span id="corner-diya-icon-3" class="text-lg sm:text-xl opacity-50 filter">🪔</span>
+                            </button>
+
+                            <!-- DYNAMICALLY GENERATED INTRICATE SVG RANGOLI -->
+                            <svg id="interactive-rangoli" class="w-full h-full relative z-10 overflow-visible" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <!-- Golden Sand Shimmer Filter -->
+                                    <filter id="goldDustGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#FFD700" flood-opacity="0.75"/>
+                                    </filter>
+                                    <radialGradient id="centerLotusGrad" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#FFFDF0"/>
+                                        <stop offset="50%" stop-color="#FFD700"/>
+                                        <stop offset="100%" stop-color="#FF8C00"/>
+                                    </radialGradient>
+                                </defs>
+
+                                <!-- Dynamic SVG Layers Injected by JS -->
+                                <g id="rangoli-svg-content"></g>
+
+                                <!-- Floating Marigold & Rose Petals Garnish Layer -->
+                                <g id="rangoli-flower-garnish" class="pointer-events-none"></g>
+                            </svg>
+                        </div>
+
+                        <p class="text-[11px] text-amber-200/75 mt-2.5 flex items-center space-x-1.5">
+                            <span>💡</span>
+                            <span><strong>Pro Tip:</strong> Hold & drag across petals to paint smoothly! Tap the 4 corner 🪔 Diyas to light them.</span>
+                        </p>
+                    </div>
+
+                    <!-- RIGHT COLUMN: ROYAL EMBELLISHMENTS & ACTIONS -->
+                    <div class="lg:col-span-3 flex flex-col items-center space-y-2.5 bg-black/40 p-3.5 rounded-2xl border border-amber-400/25">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-300 mb-0.5">✨ Royal Shringaar</span>
+
+                        <!-- Auto-Bloom Symphony -->
+                        <button onclick="autoBloomRangoli()" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500 text-stone-950 font-bold text-xs shadow-lg hover:brightness-110 active:scale-95 transition flex items-center justify-center space-x-1.5">
+                            <span>🪄</span>
+                            <span>Auto-Bloom Magic</span>
+                        </button>
+
+                        <!-- Light All 4 Corner Diyas -->
+                        <button onclick="lightAllRangoliDiyas()" class="w-full py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/35 border border-amber-400/50 text-amber-100 font-semibold text-xs transition flex items-center justify-center space-x-1.5">
+                            <span>🪔</span>
+                            <span>Light 4 Corner Diyas</span>
+                        </button>
+
+                        <!-- Shower Marigold & Rose Petals -->
+                        <button onclick="showerFlowerPetalsOnRangoli()" class="w-full py-2 px-3 rounded-xl bg-pink-500/20 hover:bg-pink-500/35 border border-pink-400/40 text-amber-100 font-semibold text-xs transition flex items-center justify-center space-x-1.5">
+                            <span>🌼</span>
+                            <span>Shower Flower Petals</span>
+                        </button>
+
+                        <!-- Toggle 24K Gold Outline Glow -->
+                        <button onclick="toggleGoldOutlineShimmer()" id="gold-dust-btn" class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/15 border border-amber-300/30 text-amber-200 font-medium text-xs transition flex items-center justify-center space-x-1.5">
+                            <span>✨</span>
+                            <span>24K Gold Dust Glow</span>
+                        </button>
+
+                        <div class="w-full border-t border-amber-500/20 my-1"></div>
+
+                        <!-- Download Keepsake PNG & Reset -->
+                        <div class="grid grid-cols-2 gap-2 w-full">
+                            <button onclick="downloadRangoliPNG()" class="py-2 px-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-100 font-semibold text-[11px] transition flex items-center justify-center space-x-1" title="Download Rangoli as PNG Image">
+                                <span>📸</span>
+                                <span>Save Art</span>
+                            </button>
+                            <button onclick="resetRangoliBoard()" class="py-2 px-2 rounded-xl bg-white/5 hover:bg-rose-500/25 border border-white/15 text-amber-200/80 font-medium text-[11px] transition flex items-center justify-center space-x-1" title="Clear Rangoli">
+                                <span>🔄</span>
+                                <span>Clear</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Lakshmi Pada (Auspicious Footsteps) Completion Banner -->
+                <div id="rangoli-blessing-banner" class="mt-4 max-w-xl mx-auto px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-pink-500/15 to-amber-500/15 border border-amber-400/40 text-xs sm:text-sm text-amber-200 font-medium transition-all duration-500">
+                    👣 <span id="rangoli-status-msg">Paint the Rangoli rings or tap <strong>Auto-Bloom Magic</strong> to welcome auspicious blessings into Vini's courtyard!</span>
+                </div>
+
+                <button onclick="navigateToChapter(4)" class="mt-5 px-8 py-3.5 rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-stone-950 font-bold text-sm sm:text-base shadow-[0_0_25px_rgba(255,215,0,0.5)] hover:brightness-110 active:scale-95 transition flex items-center space-x-2 mx-auto">
+                    <span>Continue to Chapter IV: The Sky Lantern Observatory</span>
+                    <span>➔</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             CHAPTER 4: THE AKASH DEEP — SKY LANTERN & FIREWORKS OBSERVATORY
+             =============================================================== -->
+        <section id="chapter-4" class="chapter-section chapter-hidden w-full">
+            <div class="palace-card rounded-3xl p-6 sm:p-9 text-center relative overflow-hidden">
+                <div class="inline-flex items-center space-x-2 px-4 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-200 text-xs uppercase tracking-widest mb-3">
+                    <span>🏮 Chapter IV of V</span>
+                    <span>&bull;</span>
+                    <span>Akash Deep Observatory</span>
+                </div>
+
+                <h2 class="font-royal text-2xl sm:text-4xl font-bold shimmer-gold mb-2">
+                    Release a Sky Lantern to the Stars
+                </h2>
+                <p class="text-amber-100/80 text-xs sm:text-sm max-w-xl mx-auto font-light mb-5">
+                    As the Diyas glow below and the Rangoli blooms, look up to the velvety Diwali sky. Write a heartfelt wish for yourself or choose a blessing below, and release a glowing <strong class="text-amber-300">Akash Deep</strong> into the heavens!
+                </p>
+
+                <!-- Interactive Sky Lantern & Fireworks Stage -->
+                <div id="sky-observatory" onclick="triggerObservatoryFirework(event)" class="relative w-full h-64 sm:h-72 rounded-2xl overflow-hidden mb-5 border border-amber-400/35 cursor-crosshair flex flex-col items-center justify-end p-4"
+                     style="background: radial-gradient(circle at 50% 0%, #240b42 0%, #0f041d 60%, #05010a 100%); box-shadow: inset 0 0 40px rgba(0,0,0,0.9);">
+                    
+                    <!-- Twinkling Starfield Backdrop -->
+                    <div class="absolute inset-0 pointer-events-none opacity-75">
+                        <span class="night-star absolute top-6 left-[12%] text-amber-200 text-xs">✦</span>
+                        <span class="night-star absolute top-14 left-[28%] text-white text-[10px]" style="animation-delay:0.7s">★</span>
+                        <span class="night-star absolute top-8 left-[48%] text-amber-300 text-xs" style="animation-delay:1.3s">✦</span>
+                        <span class="night-star absolute top-16 left-[68%] text-white text-[10px]" style="animation-delay:0.4s">★</span>
+                        <span class="night-star absolute top-10 left-[84%] text-amber-200 text-xs" style="animation-delay:1.8s">✦</span>
+                    </div>
+
+                    <div class="absolute top-3 left-4 text-[11px] text-amber-200/80 pointer-events-none flex items-center space-x-1.5 z-20">
+                        <span>🎆</span>
+                        <span>Tap anywhere in this night sky to launch Royal Fireworks!</span>
+                    </div>
+
+                    <div class="absolute top-3 right-4 text-[11px] bg-amber-400/15 border border-amber-300/30 px-2.5 py-0.5 rounded-full text-amber-200 pointer-events-none z-20">
+                        Lanterns Released: <span id="lantern-count">3</span>
+                    </div>
+
+                    <!-- Floating Sky Lanterns Container -->
+                    <div id="lanterns-stage" class="absolute inset-0 pointer-events-none overflow-hidden z-10"></div>
+
+                    <!-- Subtle Royal Palace Horizon Silhouette -->
+                    <svg class="absolute bottom-0 left-0 w-full h-12 text-[#090206] pointer-events-none opacity-80" viewBox="0 0 1200 100" preserveAspectRatio="none" fill="currentColor">
+                        <path d="M0,100 L0,65 L80,65 L100,35 L120,65 L220,65 L250,20 L280,65 L420,65 L450,30 L480,65 L560,65 L600,5 L640,65 L720,65 L750,30 L780,65 L920,65 L950,20 L980,65 L1080,65 L1100,35 L1120,65 L1200,65 L1200,100 Z"/>
+                    </svg>
+
+                    <div class="w-full text-center z-20 pointer-events-none">
+                        <span class="text-xs text-amber-300/90 tracking-widest uppercase font-semibold">✨ Wishing Skies of Deepavali ✨</span>
+                    </div>
+                </div>
+
+                <!-- Wish Input & Quick Release Controls -->
+                <div class="max-w-lg mx-auto space-y-3 mb-6">
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input id="lantern-wish-input" type="text" maxlength="60" placeholder="Type your heartfelt wish, Vini... ✨" 
+                               class="flex-1 px-4 py-2.5 rounded-full bg-black/50 border border-amber-400/40 text-amber-100 placeholder-amber-200/40 text-xs sm:text-sm focus:outline-none focus:border-amber-300" />
+                        <button onclick="releaseSkyLantern()" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 text-stone-950 font-bold text-xs sm:text-sm shadow-lg hover:brightness-110 active:scale-95 transition whitespace-nowrap">
+                            🏮 Release Sky Lantern
+                        </button>
+                    </div>
+
+                    <!-- Quick Preset Wishes -->
+                    <div class="flex flex-wrap items-center justify-center gap-1.5 text-[11px]">
+                        <span class="text-amber-200/60 mr-1">Or tap a preset wish:</span>
+                        <button onclick="setQuickWish('Infinite Joy & Peace 🪷')" class="px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/15 border border-amber-300/25 text-amber-200 transition">Infinite Joy 🪷</button>
+                        <button onclick="setQuickWish('Big Dreams & Milestones 🚀')" class="px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/15 border border-amber-300/25 text-amber-200 transition">Big Milestones 🚀</button>
+                        <button onclick="setQuickWish('Good Health & Adventure 🌟')" class="px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/15 border border-amber-300/25 text-amber-200 transition">Health & Travel 🌟</button>
+                        <button onclick="launchGrandFinaleFireworks()" class="px-3 py-1 rounded-full bg-amber-400/20 hover:bg-amber-400/35 border border-amber-300/50 text-amber-200 font-semibold transition">🎆 Grand Finale Sky-Show</button>
+                    </div>
+                </div>
+
+                <button onclick="navigateToChapter(5)" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-stone-950 font-bold text-sm sm:text-base shadow-[0_0_30px_rgba(255,215,0,0.6)] hover:brightness-110 active:scale-95 transition flex items-center space-x-2 mx-auto">
+                    <span>Unfurl Chapter V: Your Royal Keepsake Scroll</span>
+                    <span>➔</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             CHAPTER 5: THE ROYAL SCROLL & KEEPSAKE PORTRAIT (GRAND FINALE)
+             =============================================================== -->
+        <section id="chapter-5" class="chapter-section chapter-hidden w-full">
+            <div class="palace-card rounded-3xl p-6 sm:p-10 text-center relative overflow-hidden">
+                <div class="inline-flex items-center space-x-2 px-4 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-200 text-xs uppercase tracking-widest mb-4">
+                    <span>📜 Chapter V of V</span>
+                    <span>&bull;</span>
+                    <span>The Royal Wish</span>
+                </div>
+
+                <!-- Ornate Rotating Mandala Portrait Frame for Vini -->
+                <div class="relative w-36 h-36 sm:w-44 sm:h-44 mx-auto mb-5 group">
+                    <div class="absolute -inset-2 rounded-full bg-gradient-to-tr from-amber-400 via-pink-500 to-yellow-300 animate-spin opacity-85" style="animation-duration: 14s;"></div>
+                    <div class="absolute -inset-1 rounded-full bg-[#1a040d]"></div>
+
+                    <div class="relative w-full h-full rounded-full overflow-hidden p-1.5 flex items-center justify-center bg-gradient-to-b from-amber-900/40 to-stone-950">
+                        <img id="vini-portrait" 
+                             src="./vini.jpeg" 
+                             alt="Vini" 
+                             class="vini-sync-img w-full h-full object-cover rounded-full shadow-2xl transition duration-500 group-hover:scale-105"
+                             onerror="handlePortraitFallback(this)">
+                    </div>
+
+                    <label for="vini-photo-upload" class="absolute bottom-0 right-0 bg-gradient-to-r from-amber-400 to-orange-500 text-stone-950 p-2.5 rounded-full cursor-pointer shadow-xl border-2 border-white hover:scale-110 active:scale-90 transition" title="Add Vini's Favourite Photo">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <input id="vini-photo-upload" type="file" accept="image/*" class="hidden" onchange="uploadViniPhoto(event)">
+                    </label>
+                </div>
+
+                <h2 class="font-royal text-3xl sm:text-5xl font-bold shimmer-gold mb-2">
+                    Shubh Deepavali, Vini!
+                </h2>
+                <p class="font-festive text-amber-300 text-sm sm:text-base tracking-wide mb-6">
+                    “तमसो मा ज्योतिर्गमय” &bull; May Light Always Guide Your Path
+                </p>
+
+                <!-- THE ROYAL PARCHMENT SCROLL LETTER -->
+                <div class="max-w-2xl mx-auto my-4">
+                    <!-- Top Brass Scroll Rod -->
+                    <div class="h-4 w-full bg-gradient-to-r from-amber-700 via-yellow-300 to-amber-700 rounded-full shadow-lg flex items-center justify-between px-2">
+                        <div class="w-3 h-6 bg-amber-500 rounded-full -ml-3 border border-yellow-200"></div>
+                        <div class="w-3 h-6 bg-amber-500 rounded-full -mr-3 border border-yellow-200"></div>
+                    </div>
+
+                    <!-- Scroll Body -->
+                    <div class="royal-scroll px-6 py-7 sm:px-10 sm:py-9 text-left mx-2 rounded-b-sm relative">
+                        <div class="text-center mb-4">
+                            <span class="text-xs uppercase tracking-widest text-amber-900/70 font-bold">✦ A Royal Deepavali Wish ✦</span>
+                        </div>
+
+                        <p class="font-script text-2xl sm:text-3xl text-rose-950 font-bold mb-3">
+                            Dearest Vini,
+                        </p>
+
+                        <div class="space-y-3.5 text-sm sm:text-base text-stone-800 leading-relaxed font-normal">
+                            <p id="scroll-typewriter-lead" class="font-medium text-rose-950 bg-amber-500/10 px-3.5 py-2.5 rounded-xl border border-amber-700/20 italic">
+                                ✨ "To the friend whose warmth outshines a thousand festive lamps—may this Diwali bring magic to every corner of your world, Vini!"
+                            </p>
+                            <p>
+                                Flipping through the chapters of life, some people are like gentle Diyas—they don’t just shine for themselves, they quietly make the world around them warmer, brighter, and infinitely more beautiful. <strong class="text-rose-950">You are that rare light, Vini.</strong>
+                            </p>
+                            <p>
+                                As thousands of lamps flicker in the Diwali night sky, I wanted to craft this little palace of light to remind you how deeply appreciated and cherished you are. Thank you for the effortless grace, the genuine laughter, and the wonderful positivity you bring into every moment.
+                            </p>
+                            <blockquote class="my-4 p-3.5 bg-amber-500/15 border-l-4 border-amber-700 rounded-r-xl text-center italic font-festive text-base sm:text-lg text-rose-950">
+                                "हर दिया आपकी मुस्कुराहट सा जगमगाए,<br>
+                                हर खुशी आपके आँगन में फूलों सी खिल जाए,<br>
+                                इस दिवाली लक्ष्मी जी और खुशियों का ऐसा आशीर्वाद मिले,<br>
+                                कि आपका हर सपना सोने सा सच हो जाए!" ✨
+                            </blockquote>
+                            <p>
+                                May this Festival of Lights mark the beginning of your happiest, healthiest, and most triumphant chapter yet. Keep shining your unstoppable light!
+                            </p>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-amber-900/20 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs uppercase tracking-wider text-amber-900/70 font-semibold">With Warmest Wishes & Gratitude,</p>
+                                <p class="font-script text-2xl text-rose-950 font-bold">Your Well‑Wisher Forever 🪔✨</p>
+                                <p class="font-script text-2xl text-rose-950 font-bold">Rohit Rathi</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-red-700 to-rose-900 border-2 border-amber-400 shadow-md flex items-center justify-center text-amber-200 font-royal text-xs font-bold" title="Royal Seal">
+                                शुभ
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Brass Scroll Rod -->
+                    <div class="h-4 w-full bg-gradient-to-r from-amber-700 via-yellow-300 to-amber-700 rounded-full shadow-lg flex items-center justify-between px-2">
+                        <div class="w-3 h-6 bg-amber-500 rounded-full -ml-3 border border-yellow-200"></div>
+                        <div class="w-3 h-6 bg-amber-500 rounded-full -mr-3 border border-yellow-200"></div>
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE ROYAL MITHAI THALI (SWEET BOX) -->
+                <div class="max-w-xl mx-auto mt-8 palace-card-gold rounded-2xl p-5">
+                    <h3 class="font-festive text-lg sm:text-xl text-amber-300 mb-1">
+                        🍬 Royal Diwali Mithai Box for Vini
+                    </h3>
+                    <p class="text-xs text-amber-100/75 mb-4">
+                        Kuch meetha ho jaaye! Tap your favorite festive sweet below for a surprise compliment:
+                    </p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <button onclick="tasteMithai('Kaju Katli', '💎 Just like silver-leaf Kaju Katli, you are timeless, classic, and everyone’s absolute favorite, Vini!')" class="p-3 rounded-xl bg-black/35 hover:bg-amber-400/20 border border-amber-300/30 transition group">
+                            <div class="text-2xl sm:text-3xl mb-1 group-hover:scale-125 transition">💠</div>
+                            <div class="text-xs font-bold text-amber-200">Kaju Katli</div>
+                            <div class="text-[10px] text-amber-100/60">24K Silver Leaf</div>
+                        </button>
+                        <button onclick="tasteMithai('Motichoor Laddoo', '🟠 Like golden pearls of Motichoor Laddoo, may every single day of your year be packed with sweetness & celebration!')" class="p-3 rounded-xl bg-black/35 hover:bg-amber-400/20 border border-amber-300/30 transition group">
+                            <div class="text-2xl sm:text-3xl mb-1 group-hover:scale-125 transition">🟠</div>
+                            <div class="text-xs font-bold text-amber-200">Motichoor Laddoo</div>
+                            <div class="text-[10px] text-amber-100/60">Saffron Pistachio</div>
+                        </button>
+                        <button onclick="tasteMithai('Hot Gulab Jamun', '🍯 Warm, soulful, and irresistibly sweet—just like the warmth and comfort your friendship brings!')" class="p-3 rounded-xl bg-black/35 hover:bg-amber-400/20 border border-amber-300/30 transition group">
+                            <div class="text-2xl sm:text-3xl mb-1 group-hover:scale-125 transition">🟤</div>
+                            <div class="text-xs font-bold text-amber-200">Gulab Jamun</div>
+                            <div class="text-[10px] text-amber-100/60">Rose Cardamom</div>
+                        </button>
+                        <button onclick="tasteMithai('Kesar Pista Barfi', '💚 Rich, royal, and vibrant—may your life always be garnished with golden health, laughter, and royal success!')" class="p-3 rounded-xl bg-black/35 hover:bg-amber-400/20 border border-amber-300/30 transition group">
+                            <div class="text-2xl sm:text-3xl mb-1 group-hover:scale-125 transition">🟩</div>
+                            <div class="text-xs font-bold text-amber-200">Kesar Pista Barfi</div>
+                            <div class="text-[10px] text-amber-100/60">Royal Saffron</div>
+                        </button>
+                    </div>
+                    <p id="mithai-compliment" class="mt-3 text-xs sm:text-sm text-amber-200 font-medium italic min-h-[20px]"></p>
+                </div>
+
+                <!-- Final Actions -->
+                <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
+                    <button onclick="launchGrandFinaleFireworks()" class="px-6 py-3 rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-stone-950 font-bold text-xs sm:text-sm shadow-lg hover:brightness-110 active:scale-95 transition flex items-center space-x-2">
+                        <span>🎆</span>
+                        <span>Launch Royal Fireworks</span>
+                    </button>
+                    <button onclick="copyFinalGreeting()" class="px-5 py-3 rounded-full palace-card hover:bg-white/15 border border-amber-300/40 text-amber-100 font-semibold text-xs sm:text-sm transition flex items-center space-x-2">
+                        <span>📋</span>
+                        <span>Copy Wish</span>
+                    </button>
+                    <button onclick="navigateToChapter(1, true)" class="px-5 py-3 rounded-full bg-white/5 hover:bg-white/15 border border-amber-300/25 text-amber-200 font-medium text-xs sm:text-sm transition flex items-center space-x-1.5">
+                        <span>🔄</span>
+                        <span>Replay Journey</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CUSTOM FLOATING TOAST NOTIFICATION -->
+    <div id="toast-box" class="fixed bottom-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 palace-card px-5 py-3 rounded-full border border-amber-300/60 text-amber-100 text-xs sm:text-sm shadow-2xl flex items-center space-x-2.5 pointer-events-none">
+        <span id="toast-icon" class="text-base">🪔</span>
+        <span id="toast-message">Shubh Deepavali, Vini!</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="w-full text-center py-3 z-20 text-[11px] text-amber-200/50 font-light mt-6">
+        Handcrafted with immense effort & festive joy exclusively for <strong class="text-amber-300/80">Vini</strong> &bull; Shubh Deepavali 🪔✨
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ENGINE ==================== -->
+    <script>
+        /* =====================================================================
+           0. GITHUB PAGES RESILIENT IMAGE FALLBACK HANDLER
+           ===================================================================== */
+        const ROYAL_SVG_AVATAR = "data:image/svg+xml;utf8," + encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+                <defs>
+                    <radialGradient id="bg" cx="50%" cy="45%" r="55%">
+                        <stop offset="0%" stop-color="#4a0e27"/>
+                        <stop offset="100%" stop-color="#14030a"/>
+                    </radialGradient>
+                    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#FFE875"/>
+                        <stop offset="50%" stop-color="#FFD700"/>
+                        <stop offset="100%" stop-color="#FF8C00"/>
+                    </linearGradient>
+                </defs>
+                <rect width="240" height="240" fill="url(#bg)"/>
+                <circle cx="120" cy="120" r="102" fill="none" stroke="url(#gold)" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>
+                <circle cx="120" cy="120" r="88" fill="none" stroke="url(#gold)" stroke-width="1" opacity="0.4"/>
+                <text x="120" y="95" text-anchor="middle" font-size="38">👑</text>
+                <text x="120" y="142" text-anchor="middle" fill="url(#gold)" font-family="Georgia, serif" font-weight="bold" font-size="32" letter-spacing="3">VINI</text>
+                <text x="120" y="172" text-anchor="middle" fill="#ffd8a8" font-family="sans-serif" font-size="12" letter-spacing="3">SHUBH DEEPAVALI</text>
+                <text x="120" y="204" text-anchor="middle" font-size="22">🪔</text>
+            </svg>
+        `);
+
+        function handlePortraitFallback(imgEl) {
+            const step = parseInt(imgEl.getAttribute('data-fallback-step') || '0', 10);
+            if (step === 0) {
+                imgEl.setAttribute('data-fallback-step', '1');
+                imgEl.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80';
+            } else {
+                imgEl.onerror = null;
+                imgEl.src = ROYAL_SVG_AVATAR;
+            }
+        }
+        window.handlePortraitFallback = handlePortraitFallback;
+
+        function safeConfetti(opts) {
+            try {
+                if (typeof confetti === 'function') {
+                    confetti(opts);
+                }
+            } catch (err) {}
+        }
+
+        /* =====================================================================
+           1. STATE & CHAPTER NAVIGATION CONTROLLER (BULLETPROOF)
+           ===================================================================== */
+        let currentChapter = 1;
+        let maxUnlockedChapter = 5;
+        let prathamLit = false;
+        let thaliDiyasLit = [false, false, false, false, false];
+        let lanternCounter = 3;
+
+        const fiveBlessings = [
+            {
+                name: "1. Diya of Radiance (Tejas) ✨",
+                desc: "For your infectious smile and inner warmth, Vini—the kind that effortlessly lights up every room you walk into."
+            },
+            {
+                name: "2. Diya of Triumph (Vijaya) 🏆",
+                desc: "May every dream you chase and every goal you set this year transform into a proud, golden milestone."
+            },
+            {
+                name: "3. Diya of Abundance (Shree) 🪷",
+                desc: "May Goddess Lakshmi bless your path with effortless grace, boundless prosperity, and exciting new doors."
+            },
+            {
+                name: "4. Diya of Serenity (Shanti) 🕊️",
+                desc: "For calm amidst busy days, cozy evenings, and a heart that always feels light, peaceful, and celebrated."
+            },
+            {
+                name: "5. Diya of Cherished Bonds (Sneha) 💖",
+                desc: "Grateful beyond words for a friend as rare, genuine, thoughtful, and wonderful as you, Vini!"
+            }
+        ];
+
+        function unlockChapter(chapterNum) {
+            if (chapterNum > maxUnlockedChapter) {
+                maxUnlockedChapter = chapterNum;
+            }
+            updateStepperUI();
+        }
+
+        function updateStepperUI() {
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`step-btn-${i}`);
+                if (!btn) continue;
+                if (i === currentChapter) {
+                    btn.className = "step-pill flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-bold transition-all bg-gradient-to-r from-amber-400 to-orange-500 text-stone-950 shadow-[0_0_15px_rgba(255,215,0,0.6)] scale-105";
+                } else {
+                    btn.className = "step-pill flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-semibold transition-all bg-amber-400/15 text-amber-200 border border-amber-400/40 hover:bg-amber-400/30 cursor-pointer";
+                }
+            }
+        }
+
+        function navigateToChapter(targetChapter, forceJump = false) {
+            const targetNum = parseInt(targetChapter, 10);
+            if (isNaN(targetNum) || targetNum < 1 || targetNum > 5) return;
+
+            // Explicitly hide all chapter sections and show only the target chapter
+            const allSections = document.querySelectorAll('.chapter-section');
+            allSections.forEach(sec => {
+                if (sec.id === `chapter-${targetNum}`) {
+                    sec.classList.remove('chapter-hidden');
+                    sec.classList.add('chapter-active');
+                    sec.style.display = 'block';
+                } else {
+                    sec.classList.remove('chapter-active');
+                    sec.classList.add('chapter-hidden');
+                    sec.style.display = 'none';
+                }
+            });
+
+            currentChapter = targetNum;
+            updateStepperUI();
+
+            try {
+                ringTempleBell(targetNum * 110 + 440);
+            } catch (e) {}
+
+            try {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (e) {
+                window.scrollTo(0, 0);
+            }
+
+            if (targetNum === 4) {
+                initSkyObservatoryLanterns();
+            } else if (targetNum === 5) {
+                startScrollTypewriter();
+                setTimeout(() => launchGrandFinaleFireworks(), 400);
+            }
+        }
+        window.navigateToChapter = navigateToChapter;
+
+        let scrollTypeTimer = null;
+        function startScrollTypewriter() {
+            const target = document.getElementById('scroll-typewriter-lead');
+            if (!target) return;
+            const message = '✨ "To the friend whose warmth outshines a thousand festive lamps—may this Diwali bring magic, triumph, and endless smiles to every corner of your world, Vini!"';
+            target.innerHTML = '';
+            let idx = 0;
+            if (scrollTypeTimer) clearTimeout(scrollTypeTimer);
+            function step() {
+                if (idx < message.length) {
+                    target.innerHTML += message.charAt(idx);
+                    idx++;
+                    scrollTypeTimer = setTimeout(step, 28);
+                }
+            }
+            step();
+        }
+
+        /* =====================================================================
+           2. WEB AUDIO API SYNTHESIZER (SITAR RAGA YAMAN + TEMPLE BELLS)
+           ===================================================================== */
+        let audioCtx = null;
+        let isPlayingRaga = false;
+        let ragaInterval = null;
+
+        function initAudio() {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) return null;
+            if (!audioCtx) {
+                audioCtx = new AudioContextClass();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function ringTempleBell(baseFreq = 880) {
+            try {
+                const ctx = initAudio();
+                if (!ctx) return;
+                const now = ctx.currentTime;
+                const harmonics = [1, 2.0, 2.76, 4.1];
+
+                harmonics.forEach((mult, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = idx === 0 ? 'sine' : 'triangle';
+                    osc.frequency.setValueAtTime(baseFreq * mult, now);
+
+                    const vol = 0.12 / (idx + 1);
+                    gain.gain.setValueAtTime(vol, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.8 / (idx * 0.6 + 1));
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 1.9);
+                });
+            } catch (e) {}
+        }
+        window.ringTempleBell = ringTempleBell;
+
+        function playSitarNote(freq, duration = 1.2) {
+            try {
+                const ctx = initAudio();
+                if (!ctx) return;
+                const now = ctx.currentTime;
+
+                const osc1 = ctx.createOscillator();
+                const osc2 = ctx.createOscillator();
+                const filter = ctx.createBiquadFilter();
+                const gain = ctx.createGain();
+
+                osc1.type = 'sawtooth';
+                osc2.type = 'triangle';
+                osc1.frequency.setValueAtTime(freq, now);
+                osc2.frequency.setValueAtTime(freq * 1.003, now);
+
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(freq * 4, now);
+                filter.frequency.exponentialRampToValueAtTime(freq * 1.2, now + duration);
+
+                gain.gain.setValueAtTime(0.001, now);
+                gain.gain.linearRampToValueAtTime(0.11, now + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+                osc1.connect(filter);
+                osc2.connect(filter);
+                filter.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc1.start(now);
+                osc2.start(now);
+                osc1.stop(now + duration);
+                osc2.stop(now + duration);
+            } catch (e) {}
+        }
+
+        const ragaYamanPhrase = [
+            { f: 246.94, d: 0.9, t: 0 },
+            { f: 293.66, d: 1.1, t: 0.6 },
+            { f: 329.63, d: 1.2, t: 1.3 },
+            { f: 369.99, d: 1.0, t: 2.1 },
+            { f: 440.00, d: 1.4, t: 2.8 },
+            { f: 392.00, d: 1.2, t: 3.7 },
+            { f: 329.63, d: 1.1, t: 4.5 },
+            { f: 293.66, d: 1.1, t: 5.3 },
+            { f: 261.63, d: 2.0, t: 6.1 }
+        ];
+
+        function startRagaLoop() {
+            if (!isPlayingRaga) return;
+            playSitarNote(130.81, 3.5);
+            setTimeout(() => { if (isPlayingRaga) playSitarNote(196.00, 3.5); }, 3500);
+
+            ragaYamanPhrase.forEach(note => {
+                setTimeout(() => {
+                    if (isPlayingRaga) playSitarNote(note.f, note.d);
+                }, note.t * 1000);
+            });
+
+            ragaInterval = setTimeout(() => {
+                if (isPlayingRaga) startRagaLoop();
+            }, 8200);
+        }
+
+        function toggleFestiveMusic() {
+            const icon = document.getElementById('audio-icon');
+            const label = document.getElementById('audio-label');
+
+            if (!isPlayingRaga) {
+                isPlayingRaga = true;
+                if (icon) icon.innerText = '🔊';
+                if (label) label.innerText = 'Pause Raga';
+                startRagaLoop();
+                showToast('🎶 Classical Raga Yaman & Tanpura playing', '🪕');
+            } else {
+                isPlayingRaga = false;
+                if (icon) icon.innerText = '🎵';
+                if (label) label.innerText = 'Play Sitar Raga';
+                if (ragaInterval) clearTimeout(ragaInterval);
+                showToast('Festive melody paused', '🔇');
+            }
+        }
+        window.toggleFestiveMusic = toggleFestiveMusic;
+
+        /* =====================================================================
+           3. CHAPTER 1 LOGIC: IGNITING THE PRATHAM DIYA (< 0.25s INSTANT RESPONSE)
+           ===================================================================== */
+        function ignitePrathamDiya() {
+            if (prathamLit) {
+                navigateToChapter(2);
+                return;
+            }
+            prathamLit = true;
+
+            const wave = document.getElementById('first-light-shockwave');
+            if (wave) wave.classList.add('trigger');
+
+            const flame = document.getElementById('pratham-flame');
+            if (flame) flame.classList.remove('opacity-0');
+
+            const aura = document.getElementById('pratham-aura');
+            if (aura) aura.className = "absolute inset-0 rounded-full bg-amber-400/50 blur-3xl transition-all duration-200 pointer-events-none";
+
+            const bgMandala = document.getElementById('bg-mandala');
+            if (bgMandala) bgMandala.classList.add('illuminated');
+            document.body.classList.add('courtyard-lit');
+
+            const frontWrapper = document.getElementById('front-portrait-wrapper');
+            const frontAura = document.getElementById('front-portrait-aura');
+            const frontSparkles = document.getElementById('front-portrait-sparkles');
+            if (frontWrapper) frontWrapper.classList.add('portrait-halo-lit');
+            if (frontAura) frontAura.className = "absolute -inset-6 rounded-full bg-gradient-to-tr from-amber-400/75 via-yellow-300/60 to-orange-500/75 blur-2xl transition-all duration-200 pointer-events-none";
+            if (frontSparkles) {
+                frontSparkles.classList.remove('opacity-0', 'scale-75');
+                frontSparkles.classList.add('opacity-100', 'scale-100');
+            }
+
+            const hint = document.getElementById('pratham-hint');
+            if (hint) {
+                hint.innerText = "🪔 Pratham Diya Ignited! Tap Again or Click Below ➔";
+                hint.classList.remove('animate-bounce');
+            }
+
+            const nextContainer = document.getElementById('ch1-next-container');
+            if (nextContainer) {
+                nextContainer.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                nextContainer.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            }
+
+            try {
+                ringTempleBell(523.25);
+                setTimeout(() => ringTempleBell(659.25), 90);
+                setTimeout(() => ringTempleBell(783.99), 180);
+                if (!isPlayingRaga) {
+                    toggleFestiveMusic();
+                }
+            } catch (e) {}
+
+            safeConfetti({
+                particleCount: 85,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#FFD700', '#FF8C00', '#FFF8DC', '#FF69B4']
+            });
+
+            unlockChapter(2);
+            showToast("✨ Darkness vanishes! Chapter II unlocked for Vini!", "🪔");
+        }
+        window.ignitePrathamDiya = ignitePrathamDiya;
+
+        /* =====================================================================
+           4. CHAPTER 2 LOGIC: THE FIVE SACRED DIYAS ON THE POOJA THALI
+           ===================================================================== */
+        function lightThaliDiya(index) {
+            const flame = document.getElementById(`thali-flame-${index}`);
+            if (flame) flame.classList.remove('opacity-0');
+            thaliDiyasLit[index] = true;
+
+            const pitches = [523.25, 587.33, 659.25, 783.99, 1046.50];
+            ringTempleBell(pitches[index]);
+
+            const titleEl = document.getElementById('blessing-title');
+            const descEl = document.getElementById('blessing-desc');
+            if (titleEl) titleEl.innerText = fiveBlessings[index].name;
+            if (descEl) descEl.innerText = fiveBlessings[index].desc;
+
+            const litCount = thaliDiyasLit.filter(Boolean).length;
+            const countText = document.getElementById('diya-count-text');
+            if (countText) countText.innerText = `${litCount} / 5`;
+
+            safeConfetti({
+                particleCount: 25,
+                spread: 50,
+                origin: { y: 0.55 },
+                colors: ['#FFD700', '#FFA500']
+            });
+
+            if (litCount === 5) {
+                completeAllFiveDiyas();
+            }
+        }
+        window.lightThaliDiya = lightThaliDiya;
+
+        function lightAllThaliDiyas() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    lightThaliDiya(i);
+                }, i * 280);
+            }
+        }
+        window.lightAllThaliDiyas = lightAllThaliDiyas;
+
+        function completeAllFiveDiyas() {
+            const btnAll = document.getElementById('btn-light-all');
+            if (btnAll) btnAll.classList.add('hidden');
+            const nextBtn = document.getElementById('ch2-next-btn');
+            if (nextBtn) {
+                nextBtn.classList.remove('hidden');
+                nextBtn.classList.add('inline-flex');
+            }
+
+            unlockChapter(3);
+            showToast("🌸 All 5 Sacred Lamps are glowing! Chapter III Unlocked!", "✨");
+
+            safeConfetti({
+                particleCount: 100,
+                spread: 100,
+                origin: { y: 0.5 },
+                colors: ['#FFD700', '#FF1493', '#FF8C00', '#FFFFFF']
+            });
+        }
+
+        /* =====================================================================
+           5. CHAPTER 3 LOGIC: UPGRADED INTERACTIVE DIWALI RANGOLI DARBAR
+           ===================================================================== */
+        let activeRangoliColor = '#FF2400';
+        let currentRangoliTemplate = 'lotus';
+        let symmetryMode = true;
+        let isDraggingRangoli = false;
+        let goldOutlineShimmer = false;
+        let cornerDiyasState = [false, false, false, false];
+        let rangoliCelebrated = false;
+
+        const ringRagaNotes = [783.99, 659.25, 587.33, 493.88, 440.00, 392.00, 329.63];
+
+        function buildRangoliTemplateSVG(templateName) {
+            let html = '';
+
+            if (templateName === 'lotus') {
+                html += `<g data-ring="6" stroke="#FFD700" stroke-width="1.4" fill="rgba(255, 215, 0, 0.05)">`;
+                for (let i = 0; i < 16; i++) {
+                    const angle = i * 22.5;
+                    html += `<path class="rangoli-shape" data-ring="6" d="M 200,12 C 218,12 226,28 200,48 C 174,28 182,12 200,12 Z" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<g data-ring="5" stroke="#FFD700" stroke-width="1.5" fill="rgba(255, 255, 255, 0.05)">`;
+                for (let i = 0; i < 16; i++) {
+                    const angle = i * 22.5 + 11.25;
+                    html += `<path class="rangoli-shape" data-ring="5" d="M 200,26 C 224,58 222,95 200,135 C 178,95 176,58 200,26 Z" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<g data-ring="4" stroke="#FFD700" stroke-width="1.6" fill="rgba(255, 140, 0, 0.07)">`;
+                for (let i = 0; i < 8; i++) {
+                    const angle = i * 45 + 22.5;
+                    html += `<polygon class="rangoli-shape" data-ring="4" points="200,48 232,115 200,155 168,115" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<g data-ring="3" stroke="#FFD700" stroke-width="1.8" fill="rgba(255, 20, 147, 0.08)">`;
+                for (let i = 0; i < 8; i++) {
+                    const angle = i * 45;
+                    html += `<path class="rangoli-shape" data-ring="3" d="M 200,56 C 242,88 246,136 200,175 C 154,136 158,88 200,56 Z" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<g data-ring="2" stroke="#FFD700" stroke-width="1.6" fill="rgba(255, 215, 0, 0.1)">`;
+                for (let i = 0; i < 8; i++) {
+                    const angle = i * 45 + 22.5;
+                    html += `<path class="rangoli-shape" data-ring="2" d="M 200,105 C 222,128 220,158 200,182 C 180,158 178,128 200,105 Z" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<circle class="rangoli-shape" data-ring="1" cx="200" cy="200" r="42" stroke="#FFD700" stroke-width="2" fill="rgba(255, 140, 0, 0.18)" />`;
+
+                html += `<g data-ring="0" stroke="#FFFDF0" stroke-width="1.3" fill="rgba(255, 215, 0, 0.35)">`;
+                for (let i = 0; i < 8; i++) {
+                    const angle = i * 45;
+                    html += `<path class="rangoli-shape" data-ring="0" d="M 200,165 C 209,178 209,190 200,200 C 191,190 191,178 200,165 Z" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `<circle class="rangoli-shape" data-ring="0" cx="200" cy="200" r="11" fill="#FFD700" stroke="#FFF" stroke-width="1.5" />`;
+                html += `</g>`;
+
+            } else if (templateName === 'peacock') {
+                html += `<g data-ring="5" stroke="#FFD700" stroke-width="1.5" fill="rgba(0, 229, 255, 0.06)">`;
+                for (let i = 0; i < 12; i++) {
+                    const angle = i * 30;
+                    html += `<path class="rangoli-shape" data-ring="5" d="M 200,16 C 232,42 228,88 200,125 C 172,88 168,42 200,16 Z" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<g data-ring="4" stroke="#FFD700" stroke-width="1.5" fill="rgba(16, 185, 129, 0.08)">`;
+                for (let i = 0; i < 12; i++) {
+                    const angle = i * 30;
+                    html += `<circle class="rangoli-shape" data-ring="4" cx="200" cy="52" r="14" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<g data-ring="3" stroke="#FFD700" stroke-width="1.6" fill="rgba(168, 85, 247, 0.08)">`;
+                for (let i = 0; i < 12; i++) {
+                    const angle = i * 30 + 15;
+                    html += `<path class="rangoli-shape" data-ring="3" d="M 200,64 C 225,98 222,138 200,170 C 178,138 175,98 200,64 Z" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<g data-ring="2" stroke="#FFD700" stroke-width="1.5" fill="rgba(255, 20, 147, 0.1)">`;
+                for (let i = 0; i < 12; i++) {
+                    const angle = i * 30;
+                    html += `<polygon class="rangoli-shape" data-ring="2" points="200,98 214,142 200,178 186,142" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<circle class="rangoli-shape" data-ring="1" cx="200" cy="200" r="46" stroke="#FFD700" stroke-width="2" fill="rgba(255, 215, 0, 0.16)" />`;
+                html += `<circle class="rangoli-shape" data-ring="0" cx="200" cy="200" r="24" stroke="#FFF" stroke-width="1.5" fill="rgba(0, 229, 255, 0.28)" />`;
+                html += `<circle class="rangoli-shape" data-ring="0" cx="200" cy="200" r="10" stroke="#FFD700" stroke-width="1.5" fill="#FFD700" />`;
+
+            } else if (templateName === 'toran') {
+                html += `<g data-ring="5" stroke="#FFD700" stroke-width="1.5" fill="rgba(255, 140, 0, 0.06)">`;
+                for (let i = 0; i < 16; i++) {
+                    const angle = i * 22.5;
+                    html += `<polygon class="rangoli-shape" data-ring="5" points="200,14 216,58 200,78 184,58" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<g data-ring="4" stroke="#FFD700" stroke-width="1.7" fill="rgba(255, 36, 0, 0.08)">`;
+                for (let i = 0; i < 8; i++) {
+                    const angle = i * 45;
+                    html += `<polygon class="rangoli-shape" data-ring="4" points="200,45 245,105 200,145 155,105" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<g data-ring="3" stroke="#FFD700" stroke-width="1.6" fill="rgba(255, 215, 0, 0.08)">`;
+                for (let i = 0; i < 8; i++) {
+                    const angle = i * 45 + 22.5;
+                    html += `<polygon class="rangoli-shape" data-ring="3" points="200,62 235,118 200,158 165,118" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<g data-ring="2" stroke="#FFD700" stroke-width="1.6" fill="rgba(255, 20, 147, 0.12)">`;
+                for (let i = 0; i < 8; i++) {
+                    const angle = i * 45;
+                    html += `<path class="rangoli-shape" data-ring="2" d="M 200,95 C 224,125 224,155 200,182 C 176,155 176,125 200,95 Z" transform="rotate(${angle} 200 200)" />`;
+                }
+                html += `</g>`;
+
+                html += `<circle class="rangoli-shape" data-ring="1" cx="200" cy="200" r="38" stroke="#FFD700" stroke-width="2" fill="rgba(16, 185, 129, 0.18)" />`;
+                html += `<polygon class="rangoli-shape" data-ring="0" points="200,168 228,216 172,216" stroke="#FFF" stroke-width="1.5" fill="rgba(255, 215, 0, 0.35)" />`;
+                html += `<polygon class="rangoli-shape" data-ring="0" points="200,232 228,184 172,184" stroke="#FFF" stroke-width="1.5" fill="rgba(255, 20, 147, 0.35)" />`;
+                html += `<circle class="rangoli-shape" data-ring="0" cx="200" cy="200" r="9" fill="#FFD700" stroke="#FFF" stroke-width="1.5" />`;
+            }
+
+            return html;
+        }
+
+        function initRangoliStudio() {
+            switchRangoliTemplate('lotus', true);
+
+            const svgEl = document.getElementById('interactive-rangoli');
+
+            svgEl.addEventListener('pointerdown', (e) => {
+                isDraggingRangoli = true;
+                const target = e.target.closest('.rangoli-shape');
+                if (target) {
+                    applyColorToRangoliShape(target, e.clientX, e.clientY, true);
+                }
+            });
+
+            svgEl.addEventListener('pointermove', (e) => {
+                if (!isDraggingRangoli) return;
+                const elem = document.elementFromPoint(e.clientX, e.clientY);
+                if (elem && elem.classList && elem.classList.contains('rangoli-shape')) {
+                    applyColorToRangoliShape(elem, e.clientX, e.clientY, false);
+                }
+            });
+
+            window.addEventListener('pointerup', () => {
+                isDraggingRangoli = false;
+            });
+        }
+
+        function switchRangoliTemplate(tplName, silent = false) {
+            currentRangoliTemplate = tplName;
+            rangoliCelebrated = false;
+
+            const container = document.getElementById('rangoli-svg-content');
+            container.innerHTML = buildRangoliTemplateSVG(tplName);
+            document.getElementById('rangoli-flower-garnish').innerHTML = '';
+
+            ['lotus', 'peacock', 'toran'].forEach(t => {
+                const btn = document.getElementById(`tpl-btn-${t}`);
+                if (t === tplName) {
+                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition bg-gradient-to-r from-amber-400 to-orange-500 text-stone-950 shadow";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-medium transition bg-white/5 hover:bg-white/15 text-amber-200 border border-amber-400/20";
+                }
+            });
+
+            updateRangoliProgress();
+            if (!silent) {
+                playSitarNote(523.25, 0.6);
+                showToast("🎨 Switched Rangoli Mandala design!", "🪷");
+            }
+        }
+
+        function selectRangoliColor(hex, colorName, btnElem) {
+            activeRangoliColor = hex;
+            document.getElementById('active-color-name').innerText = colorName;
+
+            document.querySelectorAll('.gulal-pot').forEach(el => {
+                el.classList.remove('active-pot');
+            });
+            btnElem.classList.add('active-pot');
+            playSitarNote(587.33, 0.45);
+        }
+
+        function toggleSymmetryMode() {
+            symmetryMode = !symmetryMode;
+            const btn = document.getElementById('symmetry-toggle-btn');
+            const label = document.getElementById('sym-label');
+            if (symmetryMode) {
+                label.innerText = "Symmetry: ON";
+                btn.className = "px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-400/25 border border-amber-300 text-amber-200 transition flex items-center space-x-1";
+                showToast("🔄 Symmetry Brush ON: Coloring 1 petal fills its whole ring!", "✨");
+            } else {
+                label.innerText = "Symmetry: OFF";
+                btn.className = "px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/5 border border-white/20 text-amber-200/70 transition flex items-center space-x-1";
+                showToast("🖌️ Single Petal Brush: Color individual petals freely!", "🎨");
+            }
+            playSitarNote(659.25, 0.4);
+        }
+
+        function applyColorToRangoliShape(shapeEl, clientX, clientY, playAudio = true) {
+            const ringIdx = parseInt(shapeEl.getAttribute('data-ring') || '0', 10);
+
+            if (!playAudio && shapeEl.getAttribute('data-painted-color') === activeRangoliColor) {
+                return;
+            }
+
+            if (symmetryMode) {
+                const ringShapes = document.querySelectorAll(`#rangoli-svg-content .rangoli-shape[data-ring="${ringIdx}"]`);
+                ringShapes.forEach(s => {
+                    s.setAttribute('fill', activeRangoliColor);
+                    s.setAttribute('data-painted', 'true');
+                    s.setAttribute('data-painted-color', activeRangoliColor);
+                    s.style.filter = `drop-shadow(0 0 10px ${activeRangoliColor})`;
+                });
+            } else {
+                shapeEl.setAttribute('fill', activeRangoliColor);
+                shapeEl.setAttribute('data-painted', 'true');
+                shapeEl.setAttribute('data-painted-color', activeRangoliColor);
+                shapeEl.style.filter = `drop-shadow(0 0 10px ${activeRangoliColor})`;
+            }
+
+            if (clientX && clientY) {
+                createSparklerParticles(clientX, clientY, 6);
+            }
+
+            if (playAudio) {
+                const freq = ringRagaNotes[ringIdx % ringRagaNotes.length];
+                playSitarNote(freq, 0.65);
+            }
+
+            unlockChapter(4);
+            updateRangoliProgress();
+        }
+
+        function updateRangoliProgress() {
+            const allShapes = document.querySelectorAll('#rangoli-svg-content .rangoli-shape');
+            const paintedShapes = document.querySelectorAll('#rangoli-svg-content .rangoli-shape[data-painted="true"]');
+            if (allShapes.length === 0) return;
+
+            const pct = Math.round((paintedShapes.length / allShapes.length) * 100);
+            document.getElementById('rangoli-progress-pct').innerText = `${pct}%`;
+
+            const statusMsg = document.getElementById('rangoli-status-msg');
+            if (pct === 100 && !rangoliCelebrated) {
+                rangoliCelebrated = true;
+                statusMsg.innerHTML = `✨ <strong>Shubh Labh! 100% Complete!</strong> Goddess Lakshmi's blessings illuminate Vini's courtyard! 🪷🪔`;
+                lightAllRangoliDiyas(true);
+                ringTempleBell(1046.50);
+                safeConfetti({
+                    particleCount: 80,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#FFD700', '#FF2400', '#FF1493', '#00E5FF']
+                });
+                showToast("🪷 Rangoli 100% Complete! Auspicious blessings unlocked!", "🎉");
+            } else if (pct > 0 && pct < 100) {
+                statusMsg.innerHTML = `🎨 <strong>${pct}% Illuminated!</strong> Keep filling the petals or light the 4 corner Diyas!`;
+            }
+        }
+
+        function applyRangoliTheme(themeKey) {
+            const themes = {
+                rajwada: ['#FFD700', '#FF2400', '#FF8C00', '#FF1493', '#FFD700', '#FF2400', '#FF8C00'],
+                paithani: ['#FFD700', '#00E5FF', '#FF1493', '#A855F7', '#10B981', '#00E5FF', '#FF1493'],
+                vrindavan: ['#FFFDF0', '#FFD700', '#10B981', '#FF8C00', '#FB7185', '#10B981', '#FFD700']
+            };
+            const palette = themes[themeKey] || themes.rajwada;
+
+            for (let r = 0; r <= 6; r++) {
+                setTimeout(() => {
+                    const shapes = document.querySelectorAll(`#rangoli-svg-content .rangoli-shape[data-ring="${r}"]`);
+                    const col = palette[r % palette.length];
+                    shapes.forEach((s, idx) => {
+                        const finalCol = (r >= 3 && idx % 2 === 1) ? palette[(r + 1) % palette.length] : col;
+                        s.setAttribute('fill', finalCol);
+                        s.setAttribute('data-painted', 'true');
+                        s.setAttribute('data-painted-color', finalCol);
+                        s.style.filter = `drop-shadow(0 0 10px ${finalCol})`;
+                    });
+                    playSitarNote(ringRagaNotes[r % ringRagaNotes.length], 0.55);
+                    updateRangoliProgress();
+                }, r * 110);
+            }
+
+            unlockChapter(4);
+        }
+
+        function autoBloomRangoli() {
+            const festivePalette = ['#FFD700', '#FF2400', '#FF8C00', '#FF1493', '#00E5FF', '#10B981', '#A855F7'];
+            const allRings = [6, 5, 4, 3, 2, 1, 0];
+
+            allRings.forEach((r, stepIdx) => {
+                setTimeout(() => {
+                    const shapes = document.querySelectorAll(`#rangoli-svg-content .rangoli-shape[data-ring="${r}"]`);
+                    shapes.forEach((s, idx) => {
+                        const col = festivePalette[(r + idx) % festivePalette.length];
+                        s.setAttribute('fill', col);
+                        s.setAttribute('data-painted', 'true');
+                        s.setAttribute('data-painted-color', col);
+                        s.style.filter = `drop-shadow(0 0 11px ${col})`;
+                    });
+                    playSitarNote(ringRagaNotes[stepIdx % ringRagaNotes.length], 0.65);
+                    updateRangoliProgress();
+                }, stepIdx * 160);
+            });
+
+            setTimeout(() => {
+                showerFlowerPetalsOnRangoli(true);
+                lightAllRangoliDiyas(true);
+            }, 1150);
+        }
+        window.switchRangoliTemplate = switchRangoliTemplate;
+        window.selectRangoliColor = selectRangoliColor;
+        window.toggleSymmetryMode = toggleSymmetryMode;
+        window.applyRangoliTheme = applyRangoliTheme;
+        window.autoBloomRangoli = autoBloomRangoli;
+
+        function toggleCornerDiya(idx) {
+            cornerDiyasState[idx] = !cornerDiyasState[idx];
+            const btn = document.getElementById(`corner-diya-${idx}`);
+            const icon = document.getElementById(`corner-diya-icon-${idx}`);
+
+            if (cornerDiyasState[idx]) {
+                icon.classList.remove('opacity-50');
+                icon.classList.add('opacity-100');
+                btn.className = "corner-diya-btn absolute z-20 p-1.5 rounded-full bg-amber-500/30 border-2 border-amber-300 shadow-[0_0_20px_#FFD700]";
+                if (idx === 0) btn.classList.add('top-2.5', 'left-2.5');
+                if (idx === 1) btn.classList.add('top-2.5', 'right-2.5');
+                if (idx === 2) btn.classList.add('bottom-2.5', 'left-2.5');
+                if (idx === 3) btn.classList.add('bottom-2.5', 'right-2.5');
+                ringTempleBell(659.25 + idx * 90);
+            } else {
+                icon.classList.add('opacity-50');
+                btn.className = "corner-diya-btn absolute z-20 p-1 rounded-full bg-black/50 border border-amber-400/40";
+                if (idx === 0) btn.classList.add('top-2.5', 'left-2.5');
+                if (idx === 1) btn.classList.add('top-2.5', 'right-2.5');
+                if (idx === 2) btn.classList.add('bottom-2.5', 'left-2.5');
+                if (idx === 3) btn.classList.add('bottom-2.5', 'right-2.5');
+            }
+        }
+
+        function lightAllRangoliDiyas(silent = false) {
+            for (let i = 0; i < 4; i++) {
+                if (!cornerDiyasState[i]) {
+                    toggleCornerDiya(i);
+                }
+            }
+            if (!silent) {
+                showToast("🪔 All 4 Corner Rangoli Diyas are glowing brightly!", "✨");
+            }
+        }
+
+        function showerFlowerPetalsOnRangoli(silent = false) {
+            const garnishGroup = document.getElementById('rangoli-flower-garnish');
+            const petalColors = ['#FF8C00', '#FFD700', '#FF1493', '#FFFDF0', '#FB7185'];
+            let petalsHTML = '';
+
+            for (let i = 0; i < 28; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 25 + Math.random() * 155;
+                const cx = 200 + Math.cos(angle) * radius;
+                const cy = 200 + Math.sin(angle) * radius;
+                const rot = Math.floor(Math.random() * 360);
+                const col = petalColors[Math.floor(Math.random() * petalColors.length)];
+
+                petalsHTML += `<ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="6" ry="3.2" fill="${col}" stroke="#FFD700" stroke-width="0.5" transform="rotate(${rot} ${cx.toFixed(1)} ${cy.toFixed(1)})" opacity="0.92" />`;
+            }
+
+            garnishGroup.innerHTML = petalsHTML;
+            playSitarNote(880, 0.7);
+            if (!silent) {
+                showToast("🌼 Fresh Marigold & Rose petals showered on the Rangoli!", "🌸");
+            }
+        }
+
+        function toggleGoldOutlineShimmer() {
+            goldOutlineShimmer = !goldOutlineShimmer;
+            const content = document.getElementById('rangoli-svg-content');
+            const btn = document.getElementById('gold-dust-btn');
+
+            if (goldOutlineShimmer) {
+                content.setAttribute('filter', 'url(#goldDustGlow)');
+                btn.className = "w-full py-2 px-3 rounded-xl bg-amber-400/30 border border-amber-300 text-amber-100 font-bold text-xs transition flex items-center justify-center space-x-1.5 shadow-[0_0_15px_rgba(255,215,0,0.4)]";
+                showToast("✨ 24K Swarna Gold Shimmer Dust applied!", "🌟");
+            } else {
+                content.removeAttribute('filter');
+                btn.className = "w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/15 border border-amber-300/30 text-amber-200 font-medium text-xs transition flex items-center justify-center space-x-1.5";
+            }
+            ringTempleBell(987.77);
+        }
+
+        function resetRangoliBoard() {
+            switchRangoliTemplate(currentRangoliTemplate, true);
+            document.getElementById('rangoli-status-msg').innerHTML = `Canvas cleared! Pick any festive Gulal color to begin a fresh masterpiece.`;
+            showToast("🔄 Rangoli courtyard cleared for a fresh creation!", "🎨");
+        }
+
+        function downloadRangoliPNG() {
+            const svgElement = document.getElementById('interactive-rangoli');
+            const serializer = new XMLSerializer();
+            const svgString = serializer.serializeToString(svgElement);
+            const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            const img = new Image();
+            img.onload = function () {
+                const exportCanvas = document.createElement('canvas');
+                exportCanvas.width = 800;
+                exportCanvas.height = 800;
+                const eCtx = exportCanvas.getContext('2d');
+
+                const grad = eCtx.createRadialGradient(400, 400, 40, 400, 400, 400);
+                grad.addColorStop(0, '#38071c');
+                grad.addColorStop(1, '#0c0106');
+                eCtx.fillStyle = grad;
+                eCtx.fillRect(0, 0, 800, 800);
+
+                eCtx.drawImage(img, 0, 0, 800, 800);
+
+                eCtx.fillStyle = '#FFD700';
+                eCtx.font = 'bold 22px serif';
+                eCtx.textAlign = 'center';
+                eCtx.fillText('✦ Shubh Deepavali, Vini! 🪔 Royal Rangoli Keepsake ✦', 400, 772);
+
+                URL.revokeObjectURL(url);
+
+                const downloadLink = document.createElement('a');
+                downloadLink.download = `Vini-Diwali-Rangoli.png`;
+                downloadLink.href = exportCanvas.toDataURL('image/png');
+                downloadLink.click();
+
+                showToast("📸 Rangoli saved as a Keepsake PNG!", "💎");
+            };
+            img.src = url;
+        }
+        window.toggleCornerDiya = toggleCornerDiya;
+        window.lightAllRangoliDiyas = lightAllRangoliDiyas;
+        window.showerFlowerPetalsOnRangoli = showerFlowerPetalsOnRangoli;
+        window.toggleGoldOutlineShimmer = toggleGoldOutlineShimmer;
+        window.resetRangoliBoard = resetRangoliBoard;
+        window.downloadRangoliPNG = downloadRangoliPNG;
+
+        /* =====================================================================
+           6. CHAPTER 4 LOGIC: AKASH DEEP SKY LANTERNS & FIREWORKS
+           ===================================================================== */
+        let observatoryInitialized = false;
+
+        function initSkyObservatoryLanterns() {
+            if (observatoryInitialized) return;
+            observatoryInitialized = true;
+            const defaultWishes = ["Happy Diwali Vini ✨", "Prosperity & Joy 🪔", "Endless Smiles 🌸"];
+            defaultWishes.forEach((w, idx) => {
+                setTimeout(() => createFloatingLanternDOM(w, 20 + idx * 30), idx * 900);
+            });
+        }
+
+        function setQuickWish(wishText) {
+            document.getElementById('lantern-wish-input').value = wishText;
+            releaseSkyLantern();
+        }
+
+        function releaseSkyLantern() {
+            const input = document.getElementById('lantern-wish-input');
+            const wish = input.value.trim() || "Shubh Deepavali, Vini! ✨";
+            input.value = "";
+
+            lanternCounter++;
+            document.getElementById('lantern-count').innerText = lanternCounter;
+
+            const randomLeft = 15 + Math.random() * 70;
+            createFloatingLanternDOM(wish, randomLeft);
+
+            ringTempleBell(783.99);
+            spawnCanvasFirework(window.innerWidth * (randomLeft / 100), window.innerHeight * 0.35);
+            showToast(`🏮 Sky Lantern released: "${wish}"`, "✨");
+            unlockChapter(5);
+        }
+
+        function createFloatingLanternDOM(wishText, leftPercent) {
+            const stage = document.getElementById('lanterns-stage');
+            const lantern = document.createElement('div');
+            lantern.className = "absolute flex flex-col items-center transition-all ease-linear pointer-events-none";
+            lantern.style.left = `${leftPercent}%`;
+            lantern.style.bottom = `-60px`;
+            lantern.style.transitionDuration = `13000ms`;
+
+            lantern.innerHTML = `
+                <div class="relative w-10 h-14 rounded-t-2xl rounded-b-md bg-gradient-to-t from-yellow-200 via-amber-400 to-orange-600 shadow-[0_0_25px_#FFD700] flex items-center justify-center border border-yellow-100/60">
+                    <div class="w-2.5 h-3.5 bg-white rounded-full blur-[1px] animate-pulse"></div>
+                </div>
+                <span class="mt-1 px-2 py-0.5 rounded bg-black/70 text-[10px] text-amber-200 whitespace-nowrap border border-amber-400/30 shadow">
+                    ${wishText}
+                </span>
+            `;
+
+            stage.appendChild(lantern);
+
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    lantern.style.bottom = '115%';
+                    lantern.style.transform = `translateX(${(Math.random() - 0.5) * 60}px) scale(0.65)`;
+                    lantern.style.opacity = '0.2';
+                }, 50);
+            });
+
+            setTimeout(() => {
+                if (lantern.parentNode) lantern.parentNode.removeChild(lantern);
+            }, 13500);
+        }
+
+        function triggerObservatoryFirework(e) {
+            spawnCanvasFirework(e.clientX, e.clientY);
+            playSitarNote(587.33 + Math.random() * 300, 0.5);
+        }
+
+        function launchGrandFinaleFireworks() {
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    const rx = window.innerWidth * (0.2 + Math.random() * 0.6);
+                    const ry = window.innerHeight * (0.15 + Math.random() * 0.4);
+                    spawnCanvasFirework(rx, ry);
+                    ringTempleBell(523.25 + i * 80);
+                }, i * 320);
+            }
+        }
+        window.setQuickWish = setQuickWish;
+        window.releaseSkyLantern = releaseSkyLantern;
+        window.triggerObservatoryFirework = triggerObservatoryFirework;
+        window.launchGrandFinaleFireworks = launchGrandFinaleFireworks;
+
+        /* =====================================================================
+           7. CHAPTER 5 & FRONT PAGE SYNCHRONIZED PHOTO UPLOAD, MITHAI BOX & SHARE
+           ===================================================================== */
+        function uploadViniPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    document.querySelectorAll('.vini-sync-img').forEach(img => {
+                        img.src = dataUrl;
+                    });
+                    showToast("📸 Vini's portrait updated across the entire journey!", "👑");
+                    safeConfetti({
+                        particleCount: 60,
+                        spread: 75,
+                        origin: { y: 0.45 },
+                        colors: ['#FFD700', '#FF8C00', '#FF1493', '#FFFDF0']
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        window.uploadViniPhoto = uploadViniPhoto;
+
+        function tasteMithai(name, message) {
+            const box = document.getElementById('mithai-compliment');
+            if (box) box.innerText = message;
+            ringTempleBell(880);
+            safeConfetti({
+                particleCount: 35,
+                spread: 60,
+                origin: { y: 0.75 },
+                colors: ['#FFD700', '#FF8C00', '#FF69B4']
+            });
+            showToast(`🍬 Served royal ${name} for Vini!`, "✨");
+        }
+        window.tasteMithai = tasteMithai;
+
+        function copyFinalGreeting() {
+            const text = `🪔 Shubh Deepavali, Dearest Vini! ✨ May the divine lights of Diwali illuminate your life with unending joy, peace, prosperity, and golden milestones! "Tamaso Ma Jyotirgamaya" 🪷🎆`;
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            try {
+                document.execCommand('copy');
+                showToast("💌 Keepsake Diwali wish copied to clipboard!", "📋");
+            } catch (e) {
+                showToast("Shubh Deepavali, Vini! 🪔", "✨");
+            }
+            document.body.removeChild(temp);
+        }
+        window.copyFinalGreeting = copyFinalGreeting;
+
+        /* =====================================================================
+           8. TOAST NOTIFICATION HELPER
+           ===================================================================== */
+        let toastTimer = null;
+        function showToast(msg, icon = '🪔') {
+            const box = document.getElementById('toast-box');
+            document.getElementById('toast-message').innerText = msg;
+            document.getElementById('toast-icon').innerText = icon;
+
+            box.classList.remove('translate-y-24', 'opacity-0');
+            box.classList.add('translate-y-0', 'opacity-100');
+
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                box.classList.remove('translate-y-0', 'opacity-100');
+                box.classList.add('translate-y-24', 'opacity-0');
+            }, 3400);
+        }
+
+        /* =====================================================================
+           9. FULL-SCREEN HTML5 CANVAS: PHULJHADI SPARKLER & AERIAL FIREWORKS
+           ===================================================================== */
+        const canvas = document.getElementById('cosmos-canvas');
+        const ctx = canvas.getContext('2d');
+        let embers = [];
+        let sparks = [];
+        let fireworkParticles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for (let i = 0; i < 40; i++) {
+            embers.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 2.2 + 0.6,
+                vy: -(Math.random() * 0.5 + 0.2),
+                vx: (Math.random() - 0.5) * 0.4,
+                alpha: Math.random() * 0.7 + 0.2
+            });
+        }
+
+        function createSparklerParticles(x, y, count = 5) {
+            const colors = ['#FFD700', '#FFF8DC', '#FF8C00', '#FF69B4'];
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 3.2 + 0.8;
+                sparks.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    life: 1.0,
+                    decay: Math.random() * 0.035 + 0.025,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    size: Math.random() * 2.2 + 1
+                });
+            }
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            createSparklerParticles(e.clientX, e.clientY, 4);
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                createSparklerParticles(e.touches[0].clientX, e.touches[0].clientY, 4);
+            }
+        }, { passive: true });
+
+        function spawnCanvasFirework(x, y) {
+            const palette = ['#FFD700', '#FF8C00', '#FF1493', '#00E5FF', '#FFFDF0', '#10B981'];
+            const mainColor = palette[Math.floor(Math.random() * palette.length)];
+            const count = 65;
+
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.1;
+                const speed = Math.random() * 5.5 + 1.5;
+                fireworkParticles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    gravity: 0.055,
+                    life: 1.0,
+                    decay: Math.random() * 0.015 + 0.012,
+                    color: i % 3 === 0 ? '#FFD700' : mainColor,
+                    size: Math.random() * 2.5 + 1.2
+                });
+            }
+        }
+
+        function animateCosmosCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            embers.forEach(e => {
+                e.y += e.vy;
+                e.x += e.vx;
+                if (e.y < -10) e.y = canvas.height + 10;
+                if (e.x < -10) e.x = canvas.width + 10;
+                if (e.x > canvas.width + 10) e.x = -10;
+
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 215, 0, ${e.alpha})`;
+                ctx.fill();
+            });
+
+            for (let i = sparks.length - 1; i >= 0; i--) {
+                const s = sparks[i];
+                s.x += s.vx;
+                s.y += s.vy;
+                s.vy += 0.08;
+                s.life -= s.decay;
+
+                if (s.life <= 0) {
+                    sparks.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = s.life;
+                ctx.strokeStyle = s.color;
+                ctx.lineWidth = s.size;
+                ctx.beginPath();
+                ctx.moveTo(s.x, s.y);
+                ctx.lineTo(s.x - s.vx * 1.6, s.y - s.vy * 1.6);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            for (let i = fireworkParticles.length - 1; i >= 0; i--) {
+                const p = fireworkParticles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vx *= 0.985;
+                p.vy *= 0.985;
+                p.vy += p.gravity;
+                p.life -= p.decay;
+
+                if (p.life <= 0) {
+                    fireworkParticles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = p.color;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            requestAnimationFrame(animateCosmosCanvas);
+        }
+
+        window.onload = function() {
+            animateCosmosCanvas();
+            initRangoliStudio();
+            updateStepperUI();
+        };
+    </script>
+</body>
+</html>
